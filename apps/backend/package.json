@@ -21,6 +21,7 @@
     "dotenv": "catalog:backend",
     "knex": "catalog:backend",
     "mysql2": "catalog:backend",
+    "redis": "catalog:backend",
     "reflect-metadata": "catalog:backend",
     "rxjs": "catalog:backend"
   },

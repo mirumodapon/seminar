@@ -19,5 +19,8 @@ export default [
       },
       pool: { min: 0, max: 5 },
     },
+    redis: {
+      url: process.env.REDIS_URL,
+    },
   })),
 ]
