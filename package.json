@@ -1,0 +1,15 @@
+{
+  "name": "seminar",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.27.0",
+  "author": "nptucsai <admin@nptucsai.org>",
+  "license": "UNLICENSED",
+  "scripts": {},
+  "dependencies": {
+    "@antfu/eslint-config": "catalog:lint",
+    "@eslint-react/eslint-plugin": "catalog:lint",
+    "eslint": "catalog:lint",
+    "eslint-plugin-react-hooks": "catalog:lint",
+    "eslint-plugin-react-refresh": "catalog:lint"
+  }
+}

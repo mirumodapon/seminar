@@ -1,0 +1,28 @@
+{
+  "name": "@seminar/frontend",
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc"
+  },
+  "dependencies": {
+    "@react-router/node": "catalog:frontend",
+    "@react-router/serve": "catalog:frontend",
+    "isbot": "catalog:frontend",
+    "react": "catalog:frontend",
+    "react-dom": "catalog:frontend",
+    "react-router": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@react-router/dev": "catalog:frontend",
+    "@tailwindcss/vite": "catalog:frontend",
+    "@types/node": "catalog:frontend",
+    "@types/react": "catalog:frontend",
+    "@types/react-dom": "catalog:frontend",
+    "tailwindcss": "catalog:frontend",
+    "typescript": "catalog:frontend",
+    "vite": "catalog:frontend",
+    "vite-tsconfig-paths": "catalog:frontend"
+  }
+}

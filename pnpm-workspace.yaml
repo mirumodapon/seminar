@@ -1,0 +1,48 @@
+packages:
+ - apps/*
+
+catalogs:
+  lint:
+    '@antfu/eslint-config': ^6.7.3
+    '@eslint-react/eslint-plugin': ^2.3.13
+    eslint-plugin-react-hooks: ^7.0.1
+    eslint-plugin-react-refresh: ^0.4.26
+    eslint: ^9.39.2
+  backend:
+    '@nestjs/cli': ^11.0.0
+    '@nestjs/common': ^11.0.1
+    '@nestjs/core': ^11.0.1
+    '@nestjs/platform-express': ^11.0.1
+    '@nestjs/schematics': ^11.0.0
+    '@nestjs/testing': ^11.0.1
+    '@types/express': ^5.0.0
+    '@types/jest': ^30.0.0
+    '@types/node': ^22.10.7
+    '@types/supertest': ^6.0.2
+    globals: ^16.0.0
+    jest: ^30.0.0
+    reflect-metadata: ^0.2.2
+    rxjs: ^7.8.1
+    source-map-support: ^0.5.21
+    supertest: ^7.0.0
+    ts-jest: ^29.2.5
+    ts-loader: ^9.5.2
+    ts-node: ^10.9.2
+    tsconfig-paths: ^4.2.0
+    typescript: ^5.7.3
+  frontend:
+    '@react-router/dev': 7.10.1
+    '@react-router/node': 7.10.1
+    '@react-router/serve': 7.10.1
+    '@tailwindcss/vite': ^4.1.13
+    '@types/node': ^22
+    '@types/react': ^19.2.7
+    '@types/react-dom': ^19.2.3
+    isbot: ^5.1.31
+    react-dom: ^19.2.3
+    react-router: 7.10.1
+    react: ^19.2.3
+    tailwindcss: ^4.1.13
+    typescript: ^5.9.2
+    vite-tsconfig-paths: ^5.1.4
+    vite: ^7.1.7
