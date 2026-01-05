@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@nestjs/common": "catalog:backend",
+    "@nestjs/config": "catalog:backend",
     "@nestjs/core": "catalog:backend",
     "@nestjs/platform-express": "catalog:backend",
     "reflect-metadata": "catalog:backend",
