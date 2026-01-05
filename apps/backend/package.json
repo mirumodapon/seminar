@@ -18,6 +18,9 @@
     "@nestjs/config": "catalog:backend",
     "@nestjs/core": "catalog:backend",
     "@nestjs/platform-express": "catalog:backend",
+    "dotenv": "catalog:backend",
+    "knex": "catalog:backend",
+    "mysql2": "catalog:backend",
     "reflect-metadata": "catalog:backend",
     "rxjs": "catalog:backend"
   },

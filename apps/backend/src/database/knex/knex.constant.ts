@@ -1,0 +1,1 @@
+export const KNEX_PROVIDER = 'KNEX_PROVIDER'
