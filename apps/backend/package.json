@@ -19,6 +19,8 @@
     "@nestjs/core": "catalog:backend",
     "@nestjs/passport": "catalog:backend",
     "@nestjs/platform-express": "catalog:backend",
+    "class-transformer": "catalog:backend",
+    "class-validator": "catalog:backend",
     "dotenv": "catalog:backend",
     "knex": "catalog:backend",
     "mysql2": "catalog:backend",
