@@ -1,6 +1,7 @@
 import type { Knex } from 'knex'
 import { Inject, Injectable } from '@nestjs/common'
 import { KNEX_PROVIDER } from '../database/knex/knex.constant'
+import { CreateUserDto } from './dto/create-user.dto'
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,7 @@ export class AuthService {
       .first()
   }
 
-  async createUser(user: any) { // FIX: any type
+  async createUser(user: CreateUserDto) {
     const [userId] = await this.knex('user')
       .insert(user)
 
