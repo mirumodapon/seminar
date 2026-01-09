@@ -32,12 +32,25 @@ export default [
       url: process.env.REDIS_URL,
     },
   })),
-  registerAs('oauth', () => ({
-    google: {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
-      scope: process.env.GOOGLE_OAUTH_SCOPE?.split(',') ?? [],
-    },
-  })),
+  registerAs('oauth', () => {
+    const clientID = process.env.GOOGLE_CLIENT_ID
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET
+    const scope = process.env.GOOGLE_OAUTH_SCOPE?.split(',')
+    const callbackURL = process.env.GOOGLE_CALLBACK_URL
+
+    if (!clientID || !clientSecret) {
+      throw new Error(
+        'Missing Google OAuth credentials: GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables must be set.',
+      )
+    }
+
+    return {
+      google: {
+        clientID,
+        clientSecret,
+        callbackURL,
+        scope: scope ?? [],
+      },
+    }
+  }),
 ]
