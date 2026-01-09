@@ -7,7 +7,7 @@ import { KnexProvider } from './knex.provider'
 describe('knexProvider', () => {
   let moduleRef: TestingModule
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     moduleRef = await Test.createTestingModule({
       imports: [ConfigModule],
       providers: [KnexProvider],
@@ -27,7 +27,7 @@ describe('knexProvider', () => {
     expect(val).toBe(2)
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     const knexInstance = moduleRef.get<Knex>(KNEX_PROVIDER)
     await knexInstance.destroy()
   })
