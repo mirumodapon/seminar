@@ -1,10 +1,13 @@
 import type { Request } from 'express'
-import { Controller, Get, Req, UseGuards } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Req, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
+import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor() { }
+  constructor(
+    private readonly authService: AuthService,
+  ) { }
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -15,6 +18,24 @@ export class AuthController {
   async googleLoginCallback(
     @Req() req: Request,
   ) {
-    return (req as any).user // FIX: Typing any
+    const user = (req as any).user // FIX: any type
+
+    if (!user) {
+      throw new BadRequestException()
+    }
+
+    let dbUser = await this.authService.findUserByEmail(user.email)
+
+    if (!dbUser) {
+      dbUser = await this.authService.createUser({
+        email: user.email,
+        name: user.name,
+      })
+    }
+
+    // TODO: set session cookie
+    // TODO: redirect
+
+    return dbUser
   }
 }
