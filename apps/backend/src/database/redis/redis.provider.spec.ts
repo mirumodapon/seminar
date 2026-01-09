@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import { Test, TestingModule } from '@nestjs/testing'
 import { RedisClientType } from 'redis'
 import { ConfigModule } from '../../config/config.module'
@@ -14,6 +15,11 @@ describe('redisProvider', () => {
     }).compile()
   })
 
+  afterAll(async () => {
+    const client = moduleRef.get<RedisClientType>(REDIS_PROVIDER)
+    await client.close()
+  })
+
   it('should provide a redis instance', async () => {
     const client = moduleRef.get<RedisClientType>(REDIS_PROVIDER)
 
@@ -24,7 +30,7 @@ describe('redisProvider', () => {
   it('should connect and set/get a key', async () => {
     const client = moduleRef.get<RedisClientType>(REDIS_PROVIDER)
 
-    const randstr = Math.random().toString(16)
+    const randstr = randomBytes(10).toString('hex')
     await client.set('UNIT_TEST', randstr, { expiration: { type: 'PX', value: 50 } })
 
     {
@@ -38,10 +44,5 @@ describe('redisProvider', () => {
       const result = await client.get('UNIT_TEST')
       expect(result).toBeNull()
     }
-  })
-
-  afterAll(async () => {
-    const client = moduleRef.get<RedisClientType>(REDIS_PROVIDER)
-    await client.close()
   })
 })

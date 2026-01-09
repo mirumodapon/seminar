@@ -14,6 +14,11 @@ describe('knexProvider', () => {
     }).compile()
   })
 
+  afterAll(async () => {
+    const knexInstance = moduleRef.get<Knex>(KNEX_PROVIDER)
+    await knexInstance.destroy()
+  })
+
   it('should provide a knex instance', async () => {
     const knexInstance = moduleRef.get<Knex>(KNEX_PROVIDER)
     expect(knexInstance).toBeDefined()
@@ -25,10 +30,5 @@ describe('knexProvider', () => {
 
     const [[{ val }]] = await knexInstance.raw('SELECT 1 + 1 as val')
     expect(val).toBe(2)
-  })
-
-  afterAll(async () => {
-    const knexInstance = moduleRef.get<Knex>(KNEX_PROVIDER)
-    await knexInstance.destroy()
   })
 })
