@@ -2,7 +2,7 @@ import { registerAs } from '@nestjs/config'
 
 export default [
   registerAs('app', () => ({
-    port: process.env.PORT || 3000,
+    port: Number(process.env.PORT) || 3000,
     session: {
       secret: process.env.SESSION_SECRET,
       resave: false,
@@ -18,8 +18,8 @@ export default [
       client: 'mysql2',
       debug: process.env.NODE_ENV === 'development',
       connection: {
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
+        host: process.env.DB_HOST || 'localhost',
+        port: Number(process.env.DB_PORT) || 3306,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
