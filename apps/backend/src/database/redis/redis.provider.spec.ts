@@ -25,14 +25,14 @@ describe('redisProvider', () => {
     const client = moduleRef.get<RedisClientType>(REDIS_PROVIDER)
 
     const randstr = Math.random().toString(16)
-    await client.set('UNIT_TEST', randstr, { EX: 1 })
+    await client.set('UNIT_TEST', randstr, { expiration: { type: 'PX', value: 50 } })
 
     {
       const result = await client.get('UNIT_TEST')
       expect(result).toBe(randstr)
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, 100))
 
     {
       const result = await client.get('UNIT_TEST')
