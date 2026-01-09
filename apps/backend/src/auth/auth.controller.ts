@@ -1,5 +1,5 @@
 import type { Request } from 'express'
-import { BadRequestException, Controller, Get, Req, UseGuards } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Req, Session, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service'
 
@@ -17,6 +17,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(
     @Req() req: Request,
+    @Session() session: Record<string, any>,
   ) {
     const user = (req as any).user // FIX: any type
 
@@ -33,7 +34,7 @@ export class AuthController {
       })
     }
 
-    // TODO: set session cookie
+    session.user = dbUser
     // TODO: redirect
 
     return dbUser
