@@ -1,10 +1,10 @@
 import { randomBytes } from 'node:crypto'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Knex } from 'knex'
-import { ConfigModule } from '../config/config.module'
-import { KNEX_PROVIDER } from '../database/knex/knex.constant'
-import { KnexProvider } from '../database/knex/knex.provider'
-import { AuthService } from './auth.service'
+import { ConfigModule } from '../../config/config.module'
+import { KNEX_PROVIDER } from '../../database/knex/knex.constant'
+import { KnexProvider } from '../../database/knex/knex.provider'
+import { AuthService } from '../auth.service'
 
 describe('knexProvider', () => {
   let moduleRef: TestingModule

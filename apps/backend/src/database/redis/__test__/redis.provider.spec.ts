@@ -1,9 +1,9 @@
 import { randomBytes } from 'node:crypto'
 import { Test, TestingModule } from '@nestjs/testing'
 import { RedisClientType } from 'redis'
-import { ConfigModule } from '../../config/config.module'
-import { REDIS_PROVIDER } from './redis.constant'
-import { RedisProvider } from './redis.provider'
+import { ConfigModule } from '../../../config/config.module'
+import { REDIS_PROVIDER } from '../redis.constant'
+import { RedisProvider } from '../redis.provider'
 
 describe('redisProvider', () => {
   let moduleRef: TestingModule

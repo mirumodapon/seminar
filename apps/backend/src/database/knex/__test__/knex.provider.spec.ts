@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { Knex } from 'knex'
-import { ConfigModule } from '../../config/config.module'
-import { KNEX_PROVIDER } from './knex.constant'
-import { KnexProvider } from './knex.provider'
+import { ConfigModule } from '../../../config/config.module'
+import { KNEX_PROVIDER } from '../knex.constant'
+import { KnexProvider } from '../knex.provider'
 
 describe('knexProvider', () => {
   let moduleRef: TestingModule
