@@ -26,8 +26,8 @@ function validatePath(basePath: string, resolvedPath: string): void {
   const relativePath = relative(normalizedBase, normalizedResolved)
   
   // Check if the relative path tries to escape the base directory
-  // A safe path should not start with '..' or be an absolute path
-  if (relativePath.startsWith('..') || isAbsolute(relativePath)) {
+  // A safe path should not start with '..'
+  if (relativePath.startsWith('..')) {
     throw new Error(`Path traversal detected: ${resolvedPath} is outside the allowed directory ${basePath}`)
   }
 }
