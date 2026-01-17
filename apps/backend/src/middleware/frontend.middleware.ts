@@ -6,16 +6,22 @@ import express from 'express'
 
 /**
  * Validates and normalizes a source path to prevent path traversal attacks.
- * 
+ *
  * @param source - The source path to validate
  * @returns The normalized absolute path
  * @throws Error if the path is not absolute
  */
 function validateAndNormalizePath(source: string): string {
+  // Check if the original source is absolute before normalization
+  if (!isAbsolute(source)) {
+    throw new Error(`Invalid source path '${source}': must be an absolute path`)
+  }
+  
   const normalizedSource = normalize(source)
   
+  // Verify the normalized path is still absolute after normalization
   if (!isAbsolute(normalizedSource)) {
-    throw new Error(`Invalid source path '${source}': must be an absolute path`)
+    throw new Error(`Invalid source path '${source}': resolved to relative path after normalization`)
   }
   
   return normalizedSource
