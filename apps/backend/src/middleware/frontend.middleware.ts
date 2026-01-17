@@ -4,14 +4,26 @@ import { isAbsolute, normalize, resolve } from 'node:path'
 import { createRequestHandler } from '@react-router/express'
 import express from 'express'
 
-export function handleFrontendServerComponents(app: INestApplication, source: string) {
-  // Normalize and validate the source path first
+/**
+ * Validates and normalizes a source path to prevent path traversal attacks.
+ * 
+ * @param source - The source path to validate
+ * @returns The normalized absolute path
+ * @throws Error if the path is not absolute
+ */
+function validateAndNormalizePath(source: string): string {
   const normalizedSource = normalize(source)
   
-  // Ensure source is an absolute path to prevent path traversal
   if (!isAbsolute(normalizedSource)) {
-    throw new Error(`Invalid source path: must be an absolute path`)
+    throw new Error(`Invalid source path '${source}': must be an absolute path`)
   }
+  
+  return normalizedSource
+}
+
+export function handleFrontendServerComponents(app: INestApplication, source: string) {
+  // Validate and normalize the source path to prevent path traversal
+  const normalizedSource = validateAndNormalizePath(source)
   
   // Resolve paths - these are safe since we use hardcoded relative paths
   const clientPath = resolve(normalizedSource, 'client')
@@ -22,11 +34,8 @@ export function handleFrontendServerComponents(app: INestApplication, source: st
 }
 
 export function handleFrontendServerComponentsMiddleware(source: string) {
-  // Validate the source path is absolute and normalized to prevent path traversal
-  const normalizedSource = normalize(source)
-  if (!isAbsolute(normalizedSource)) {
-    throw new Error(`Invalid source path: must be an absolute path`)
-  }
+  // Validate and normalize the source path to prevent path traversal
+  const normalizedSource = validateAndNormalizePath(source)
   
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.path.startsWith('/api')) {
