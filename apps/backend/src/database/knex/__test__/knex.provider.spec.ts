@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { Knex } from 'knex'
-import { ConfigModule } from '../../config/config.module'
-import { KNEX_PROVIDER } from './knex.constant'
-import { KnexProvider } from './knex.provider'
+import { ConfigModule } from '../../../config/config.module'
+import { KNEX_PROVIDER } from '../knex.constant'
+import { KnexProvider } from '../knex.provider'
 
 describe('knexProvider', () => {
   let moduleRef: TestingModule
@@ -12,6 +12,11 @@ describe('knexProvider', () => {
       imports: [ConfigModule],
       providers: [KnexProvider],
     }).compile()
+  })
+
+  afterAll(async () => {
+    const knexInstance = moduleRef.get<Knex>(KNEX_PROVIDER)
+    await knexInstance.destroy()
   })
 
   it('should provide a knex instance', async () => {
@@ -25,10 +30,5 @@ describe('knexProvider', () => {
 
     const [[{ val }]] = await knexInstance.raw('SELECT 1 + 1 as val')
     expect(val).toBe(2)
-  })
-
-  afterAll(async () => {
-    const knexInstance = moduleRef.get<Knex>(KNEX_PROVIDER)
-    await knexInstance.destroy()
   })
 })
