@@ -45,7 +45,16 @@ export function handleFrontendServerComponentsMiddleware(source: string) {
   
   // Create the request handler once and reuse it for all requests
   const reactRouterHandler = createRequestHandler({
-    build: () => import(normalizedSource),
+    build: async () => {
+      try {
+        return await import(normalizedSource)
+      }
+      catch (error) {
+        throw new Error(
+          `Failed to load frontend server module from '${normalizedSource}': ${error instanceof Error ? error.message : String(error)}`,
+        )
+      }
+    },
   })
   
   return (req: Request, res: Response, next: NextFunction) => {
