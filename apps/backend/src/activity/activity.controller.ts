@@ -110,9 +110,9 @@ export class ActivityController {
     @Param('activityId') activityId: string,
     @Param('pageId') pageId: string,
   ) {
-    const affect = await this.pageService.deletePage(activityId, pageId)
+    const affected = await this.pageService.deletePage(activityId, pageId)
 
-    if (!affect) {
+    if (!affected) {
       throw new NotFoundException('Page not found')
     }
   }
