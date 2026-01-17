@@ -2,7 +2,7 @@ import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('page', (table) => {
-    table.string('pageId', 100)
+    table.string('pageId', 50)
     table.string('activityId', 50).notNullable()
 
     table.text('content')
