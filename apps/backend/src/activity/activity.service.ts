@@ -15,10 +15,18 @@ export class ActivityService {
     return this.findActivityById(payload.activityId)
   }
 
-  findActivityById(activityId: string) {
-    return this.knex('activity')
-      .where('activityId', activityId)
-      .first()
+  async findActivityById(activityId: string) {
+    const [activity, pages] = await Promise.all([
+      this.knex('activity')
+        .where('activityId', activityId)
+        .first(),
+      this.knex('page')
+        .select('pageId', 'title')
+        .where('activityId', activityId)
+        .andWhere('draft', false),
+    ])
+
+    return activity && { ...activity, pages }
   }
 
   async updateActivity(activityId: string, payload: UpdateActivityDto) {
