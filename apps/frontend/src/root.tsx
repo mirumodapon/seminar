@@ -1,5 +1,4 @@
 import type { Route } from '../app/+types/root'
-
 import {
   isRouteErrorResponse,
   Links,
@@ -8,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router'
+import './assets/css/globals.css'
 
 export const links: Route.LinksFunction = () => []
 export const meta: Route.MetaFunction = () => [{ title: 'Seminar' }]
