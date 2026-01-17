@@ -33,13 +33,21 @@ function validatePath(basePath: string, resolvedPath: string): void {
 }
 
 export function handleFrontendServerComponents(app: INestApplication, source: string) {
+  // Normalize and validate the source path first
+  const normalizedSource = normalize(source)
+  
+  // Ensure source is an absolute path
+  if (!isAbsolute(normalizedSource)) {
+    throw new Error(`Invalid source path: must be an absolute path`)
+  }
+  
   // Resolve and validate paths
-  const clientPath = resolve(source, 'client')
-  const serverPath = resolve(source, 'server', 'index.js')
+  const clientPath = resolve(normalizedSource, 'client')
+  const serverPath = resolve(normalizedSource, 'server', 'index.js')
   
   // Validate that paths don't escape the source directory
-  validatePath(source, clientPath)
-  validatePath(source, serverPath)
+  validatePath(normalizedSource, clientPath)
+  validatePath(normalizedSource, serverPath)
   
   app.use(express.static(clientPath))
   app.use(handleFrontendServerComponentsMiddleware(serverPath))
