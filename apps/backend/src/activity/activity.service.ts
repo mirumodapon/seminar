@@ -31,8 +31,10 @@ export class ActivityService {
 
   deleteActivity(activityId: string) {
     return this.knex('activity')
-      .update('deletedAt', this.knex.fn.now())
-      .update('updatedAt', this.knex.column('updatedAt'))
       .where('activityId', activityId)
+      .update({
+        deletedAt: this.knex.fn.now(),
+        updatedAt: this.knex.column('updatedAt'),
+      })
   }
 }
