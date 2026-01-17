@@ -40,19 +40,20 @@ export function handleFrontendServerComponents(app: INestApplication, source: st
 }
 
 export function handleFrontendServerComponentsMiddleware(source: string) {
-  // Validate and normalize the source path to prevent path traversal
+  // Validate and normalize the source path once to prevent path traversal
   const normalizedSource = validateAndNormalizePath(source)
+  
+  // Create the request handler once and reuse it for all requests
+  const reactRouterHandler = createRequestHandler({
+    build: () => import(normalizedSource),
+  })
   
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.path.startsWith('/api')) {
       return next()
     }
 
-    // Use the validated and normalized path for the dynamic import
-    const reactRouterHandler = createRequestHandler({
-      build: () => import(normalizedSource),
-    })
-
+    // Use the pre-created handler
     return reactRouterHandler(req, res, next)
   }
 }
