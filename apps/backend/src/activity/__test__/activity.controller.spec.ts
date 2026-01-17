@@ -5,6 +5,7 @@ import { KNEX_PROVIDER } from '../../database/knex/knex.constant'
 import { KnexProvider } from '../../database/knex/knex.provider'
 import { ActivityController } from '../activity.controller'
 import { ActivityService } from '../activity.service'
+import { PageService } from '../page.service'
 import { generateFakeActivity } from './helper'
 
 describe('activityController', () => {
@@ -16,7 +17,7 @@ describe('activityController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
       controllers: [ActivityController],
-      providers: [ActivityService, KnexProvider],
+      providers: [ActivityService, PageService, KnexProvider],
     }).compile()
 
     controller = module.get<ActivityController>(ActivityController)

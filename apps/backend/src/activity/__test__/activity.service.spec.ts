@@ -4,6 +4,7 @@ import { ConfigModule } from '../../config/config.module'
 import { KNEX_PROVIDER } from '../../database/knex/knex.constant'
 import { KnexProvider } from '../../database/knex/knex.provider'
 import { ActivityService } from '../activity.service'
+import { PageService } from '../page.service'
 import { generateFakeActivity } from './helper'
 
 describe('activityService', () => {
@@ -14,7 +15,7 @@ describe('activityService', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
-      providers: [KnexProvider, ActivityService],
+      providers: [KnexProvider, PageService, ActivityService],
     }).compile()
 
     service = module.get<ActivityService>(ActivityService)
