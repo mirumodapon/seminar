@@ -55,6 +55,6 @@ export default [
     }
   }),
   registerAs('frontend', () => ({
-    resource: process.env.FRONTEND_RESOURCE || resolve(process.cwd(), '..', 'frontend', 'build', 'server', 'index.js'),
+    resource: process.env.FRONTEND_RESOURCE || resolve(process.cwd(), '..', 'frontend', 'build'),
   })),
 ]

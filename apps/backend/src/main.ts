@@ -12,7 +12,7 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const redis = app.get(REDIS_PROVIDER)
 
-  app.use(handleFrontendServerComponents(config.get('frontend')!.resource))
+  handleFrontendServerComponents(app, config.get('frontend')!.resource)
 
   app.use(session({
     ...config.get<SessionOptions>('app.session', { secret: '' }),
