@@ -33,9 +33,11 @@ export class PageService {
 
   deletePage(activityId: string, pageId: string) {
     return this.knex('page')
-      .update('deletedAt', this.knex.fn.now())
-      .update('updatedAt', this.knex.column('updatedAt'))
       .where('activityId', activityId)
       .andWhere('pageId', pageId)
+      .update({
+        deletedAt: this.knex.fn.now(),
+        updatedAt: this.knex.fn.now(),
+      })
   }
 }
