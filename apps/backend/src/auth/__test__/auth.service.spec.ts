@@ -6,7 +6,7 @@ import { KNEX_PROVIDER } from '../../database/knex/knex.constant'
 import { KnexProvider } from '../../database/knex/knex.provider'
 import { AuthService } from '../auth.service'
 
-describe('knexProvider', () => {
+describe('authService', () => {
   let moduleRef: TestingModule
   const testingData: number[] = []
 
