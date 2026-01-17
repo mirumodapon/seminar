@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import { registerAs } from '@nestjs/config'
 
 export default [
@@ -53,4 +54,7 @@ export default [
       },
     }
   }),
+  registerAs('frontend', () => ({
+    resource: process.env.FRONTEND_RESOURCE || resolve(process.cwd(), '..', 'frontend', 'build', 'server', 'index.js'),
+  })),
 ]

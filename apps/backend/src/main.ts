@@ -5,11 +5,14 @@ import { RedisStore } from 'connect-redis'
 import session, { SessionOptions } from 'express-session'
 import { AppModule } from './app.module'
 import { REDIS_PROVIDER } from './database/redis/redis.constant'
+import { handleFrontendServerComponents } from './middleware/frontend.middleware'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ConfigService)
   const redis = app.get(REDIS_PROVIDER)
+
+  app.use(handleFrontendServerComponents(config.get('frontend')!.resource))
 
   app.use(session({
     ...config.get<SessionOptions>('app.session', { secret: '' }),
@@ -25,6 +28,7 @@ async function bootstrap() {
   }))
 
   app.setGlobalPrefix('api')
+
   await app.listen(config.get('app.port')!)
 }
 
