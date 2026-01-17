@@ -7,22 +7,22 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@react-router/node": "catalog:frontend",
-    "@react-router/serve": "catalog:frontend",
-    "isbot": "catalog:frontend",
-    "react": "catalog:frontend",
-    "react-dom": "catalog:frontend",
-    "react-router": "catalog:frontend"
+    "@react-router/node": "7.10.1",
+    "@react-router/serve": "7.10.1",
+    "isbot": "^5.1.31",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router": "7.10.1"
   },
   "devDependencies": {
-    "@react-router/dev": "catalog:frontend",
-    "@tailwindcss/vite": "catalog:frontend",
-    "@types/node": "catalog:frontend",
-    "@types/react": "catalog:frontend",
-    "@types/react-dom": "catalog:frontend",
-    "tailwindcss": "catalog:frontend",
-    "typescript": "catalog:frontend",
-    "vite": "catalog:frontend",
-    "vite-tsconfig-paths": "catalog:frontend"
+    "@react-router/dev": "7.10.1",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/node": "^22",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.7",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }
