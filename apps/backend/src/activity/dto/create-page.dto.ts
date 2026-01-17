@@ -1,7 +1,8 @@
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator'
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator'
 
 export class CreatePageDto {
   @IsString()
+  @IsNotEmpty()
   @MaxLength(50)
   pageId: string
 
