@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react'
 import type { MarkdownOptions } from '~/utils/markdown'
+import { clsx } from 'clsx'
 import { Activity, memo, useMemo } from 'react'
 import { Markdown } from '~/utils/markdown'
 
@@ -17,6 +18,7 @@ const NpMarkdown = memo(({ options, content, className, ...props }: Props) => {
       <div
         // eslint-disable-next-line react-dom/no-dangerously-set-innerhtml
         dangerouslySetInnerHTML={{ __html: html! }}
+        className={clsx('mr:markdown prose lg:prose-xl', className)}
         {...props}
       />
     </Activity>
