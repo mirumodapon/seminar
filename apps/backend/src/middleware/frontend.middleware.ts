@@ -10,14 +10,14 @@ export function handleFrontendServerComponents(app: INestApplication, source: st
 }
 
 export function handleFrontendServerComponentsMiddleware(source: string) {
+  const reactRouterHandler = createRequestHandler({
+    build: () => import(source),
+  })
+
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.path.startsWith('/api')) {
       return next()
     }
-
-    const reactRouterHandler = createRequestHandler({
-      build: () => import(source),
-    })
 
     return reactRouterHandler(req, res, next)
   }
