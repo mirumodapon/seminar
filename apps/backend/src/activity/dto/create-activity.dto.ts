@@ -13,10 +13,6 @@ export class CreateActivityDto {
   @IsOptional()
   description?: string
 
-  @IsString()
-  @IsOptional()
-  ogImage?: string
-
   @IsBoolean()
   @IsOptional()
   active?: boolean

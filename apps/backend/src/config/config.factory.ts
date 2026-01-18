@@ -13,6 +13,7 @@ export default [
         maxAge: 24 * 60 * 60 * 1000,
       },
     },
+    staticPath: process.env.STATIC_PATH || resolve(process.cwd(), 'static'),
   })),
   registerAs('database', () => ({
     knex: {

@@ -5,7 +5,6 @@ export function generateFakeActivity(): CreateActivityDto {
   const activity: CreateActivityDto = {
     activityId: randomBytes(16).toString('hex'),
     name: randomBytes(5).toString('base64'),
-    ogImage: randomBytes(16).toString('hex'),
     description: randomBytes(50).toString('base64'),
   }
 
