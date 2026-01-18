@@ -19,10 +19,12 @@ export class ActivityService {
     const [activity, pages] = await Promise.all([
       this.knex('activity')
         .where('activityId', activityId)
+        .whereNull('deletedAt')
         .first(),
       this.knex('page')
         .select('pageId', 'title')
         .where('activityId', activityId)
+        .whereNull('deletedAt')
         .andWhere('draft', false),
     ])
 

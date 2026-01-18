@@ -17,8 +17,12 @@ export class PageService {
 
   findPageById(activityId: string, pageId: string) {
     return this.knex('page')
-      .where('activityId', activityId)
+      .select('page.*')
+      .leftJoin('activity', 'activity.activityId', 'page.activityId')
+      .where('page.activityId', activityId)
       .andWhere('pageId', pageId)
+      .whereNull('page.deletedAt')
+      .whereNull('activity.deletedAt')
       .first()
   }
 
