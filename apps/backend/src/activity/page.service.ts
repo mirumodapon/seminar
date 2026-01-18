@@ -40,4 +40,16 @@ export class PageService {
         updatedAt: this.knex.fn.now(),
       })
   }
+
+  async recoverPage(activityId: string, pageId: string) {
+    await this.knex('page')
+      .where('activityId', activityId)
+      .andWhere('pageId', pageId)
+      .update({
+        deletedAt: null,
+        updatedAt: this.knex.fn.now(),
+      })
+
+    return this.findPageById(activityId, pageId)
+  }
 }

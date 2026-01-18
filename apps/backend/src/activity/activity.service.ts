@@ -45,4 +45,15 @@ export class ActivityService {
         updatedAt: this.knex.column('updatedAt'),
       })
   }
+
+  async recoverActivity(activityId: string) {
+    await this.knex('activity')
+      .where('activityId', activityId)
+      .update({
+        deletedAt: null,
+        updatedAt: this.knex.column('updatedAt'),
+      })
+
+    return this.findActivityById(activityId)
+  }
 }

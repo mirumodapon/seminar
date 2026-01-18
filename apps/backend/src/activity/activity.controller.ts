@@ -55,6 +55,19 @@ export class ActivityController {
     await this.activityService.deleteActivity(activityId)
   }
 
+  @Post(':activityId')
+  async recoverActivity(
+    @Param('activityId') activityId: string,
+  ) {
+    const activity = await this.activityService.recoverActivity(activityId)
+
+    if (!activity) {
+      throw new NotFoundException('Activity not found')
+    }
+
+    return activity
+  }
+
   @Post(':activityId/page')
   async createPage(
     @Param('activityId') activityId: string, @Body()
@@ -115,5 +128,19 @@ export class ActivityController {
     if (!affected) {
       throw new NotFoundException('Page not found')
     }
+  }
+
+  @Post(':activityId/page/:pageId')
+  async recoverPage(
+    @Param('activityId') activityId: string,
+    @Param('pageId') pageId: string,
+  ) {
+    const page = await this.pageService.recoverPage(activityId, pageId)
+
+    if (!page) {
+      throw new NotFoundException('Page not found')
+    }
+
+    return page
   }
 }
