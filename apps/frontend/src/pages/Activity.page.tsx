@@ -4,7 +4,7 @@ import Markdown from '~/components/share/Markdown'
 import { api } from '~/service/http'
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const pageId = params.pageId ?? 'home'
+  const pageId = params.pageId ?? 'HOME'
 
   try {
     const page = await api.get(`/activity/${params.activityId}/page/${pageId}`)
