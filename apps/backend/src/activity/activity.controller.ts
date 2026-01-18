@@ -1,4 +1,5 @@
-import { Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post } from '@nestjs/common'
+import { Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common'
+import { AdminGuard } from '../common/guard/role.guard'
 import { ActivityService } from './activity.service'
 import { CreateActivityDto } from './dto/create-activity.dto'
 import { CreatePageDto } from './dto/create-page.dto'
@@ -14,6 +15,7 @@ export class ActivityController {
   ) { }
 
   @Post()
+  @UseGuards(AdminGuard)
   async createActivity(@Body() createActivityDto: CreateActivityDto) {
     const existingActivity = await this.activityService.findActivityById(createActivityDto.activityId)
 
@@ -36,6 +38,7 @@ export class ActivityController {
   }
 
   @Patch(':id')
+  @UseGuards(AdminGuard)
   async updateActivity(
     @Param('id') activityId: string, @Body()
     updateActivityDto: UpdateActivityDto,
@@ -50,12 +53,14 @@ export class ActivityController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteActivity(@Param('id') activityId: string) {
     await this.activityService.deleteActivity(activityId)
   }
 
   @Post(':activityId')
+  @UseGuards(AdminGuard)
   async recoverActivity(
     @Param('activityId') activityId: string,
   ) {
@@ -69,6 +74,7 @@ export class ActivityController {
   }
 
   @Post(':activityId/page')
+  @UseGuards(AdminGuard)
   async createPage(
     @Param('activityId') activityId: string, @Body()
     createPageDto: CreatePageDto,
@@ -103,6 +109,7 @@ export class ActivityController {
   }
 
   @Patch(':activityId/page/:pageId')
+  @UseGuards(AdminGuard)
   async updatePage(
     @Param('activityId') activityId: string,
     @Param('pageId') pageId: string,
@@ -118,6 +125,7 @@ export class ActivityController {
   }
 
   @Delete(':activityId/page/:pageId')
+  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePage(
     @Param('activityId') activityId: string,
@@ -131,6 +139,7 @@ export class ActivityController {
   }
 
   @Post(':activityId/page/:pageId')
+  @UseGuards(AdminGuard)
   async recoverPage(
     @Param('activityId') activityId: string,
     @Param('pageId') pageId: string,
