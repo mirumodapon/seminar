@@ -8,33 +8,50 @@ import { UpdateActivityDto } from './dto/update-activity.dto'
 export class ActivityService {
   constructor(@Inject(KNEX_PROVIDER) private readonly knex: Knex) { }
 
-  async createActivity(payload: CreateActivityDto) {
-    await this.knex('activity')
-      .insert(payload)
-
-    return this.findActivityById(payload.activityId)
+  findAll() {
+    return this.knex('activity')
+      .whereNull('deletedAt')
+      .select('*')
   }
 
-  findActivityById(activityId: string) {
+  findOne(id: string) {
     return this.knex('activity')
-      .where('activityId', activityId)
+      .where('activityId', id)
+      .whereNull('deletedAt')
       .first()
   }
 
-  async updateActivity(activityId: string, payload: UpdateActivityDto) {
+  async create(payload: CreateActivityDto) {
     await this.knex('activity')
-      .update(payload)
-      .where('activityId', activityId)
+      .insert(payload)
 
-    return this.findActivityById(payload.activityId || activityId)
+    return this.findOne(payload.activityId)
   }
 
-  deleteActivity(activityId: string) {
+  async update(id: string, payload: UpdateActivityDto) {
+    await this.knex('activity')
+      .where('activityId', id)
+      .update(payload)
+
+    return this.findOne(id)
+  }
+
+  remove(id: string) {
     return this.knex('activity')
-      .where('activityId', activityId)
+      .where('activityId', id)
+      .whereNull('deletedAt')
       .update({
         deletedAt: this.knex.fn.now(),
         updatedAt: this.knex.column('updatedAt'),
       })
+  }
+
+  async recover(id: string) {
+    await this.knex('activity')
+      .where('activityId', id)
+      .whereNotNull('deletedAt')
+      .update({ deletedAt: null })
+
+    return this.findOne(id)
   }
 }

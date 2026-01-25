@@ -1,23 +1,14 @@
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator'
+import { IsOptional, IsString } from 'class-validator'
 
 export class CreateActivityDto {
   @IsString()
-  @MaxLength(50)
   activityId: string
 
   @IsString()
-  @MaxLength(255)
   name: string
 
-  @IsString()
   @IsOptional()
+  @IsString()
   description?: string
-
-  @IsString()
-  @IsOptional()
-  ogImage?: string
-
-  @IsBoolean()
-  @IsOptional()
-  active?: boolean
 }
+
