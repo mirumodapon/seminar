@@ -11,4 +11,3 @@ export class CreateActivityDto {
   @IsString()
   description?: string
 }
-

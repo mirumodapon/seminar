@@ -7,4 +7,3 @@ export class UpdateActivityDto extends PartialType(CreateActivityDto) {
   @IsOptional()
   active: boolean
 }
-
