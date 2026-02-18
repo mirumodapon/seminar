@@ -9,6 +9,8 @@ import {
   ScrollRestoration,
 } from 'react-router'
 
+import './tailwind.css'
+
 export const links: Route.LinksFunction = () => []
 export const meta: Route.MetaFunction = () => [{ title: 'Seminar' }]
 
