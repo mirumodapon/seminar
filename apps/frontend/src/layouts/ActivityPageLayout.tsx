@@ -1,4 +1,5 @@
 import { Outlet, useLoaderData } from 'react-router'
+import Navbar from '~/components/Navbar'
 import { getActivities } from '../service/api'
 
 export async function loader({ params }: any) {
@@ -9,6 +10,10 @@ export async function loader({ params }: any) {
   }
 
   return { activity }
+}
+
+export function shouldRevalidate() {
+  return false
 }
 
 export function meta({ data }: any) {
@@ -29,7 +34,7 @@ function ActivityPageLayout() {
   const { activity } = useLoaderData()
   return (
     <div>
-      <pre>{JSON.stringify(activity, null, 2)}</pre>
+      <Navbar navItems={activity.pages} />
       <Outlet />
     </div>
   )

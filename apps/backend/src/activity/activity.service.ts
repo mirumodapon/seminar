@@ -14,11 +14,23 @@ export class ActivityService {
       .select('*')
   }
 
-  findOne(id: string) {
-    return this.knex('activity')
-      .where('activityId', id)
-      .whereNull('deletedAt')
-      .first()
+  async findOne(id: string) {
+    const [activity, pages] = await Promise.all([
+
+      this.knex('activity')
+        .where('activityId', id)
+        .whereNull('deletedAt')
+        .first(),
+      this.knex('page')
+        .select(['pageId', 'title'])
+        .where('activityId', id)
+        .whereNull('deletedAt'),
+    ])
+
+    return {
+      ...activity,
+      pages,
+    }
   }
 
   async create(payload: CreateActivityDto) {
