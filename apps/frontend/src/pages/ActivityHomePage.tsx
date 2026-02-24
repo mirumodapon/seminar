@@ -1,5 +1,6 @@
 import { useLoaderData } from 'react-router'
 import { getPage } from '~/service/api'
+import { Markdown } from '~/utils/markdown'
 
 export async function loader({ params }: any) {
   const page = await getPage(params.activityId, 'HOME')
@@ -8,7 +9,9 @@ export async function loader({ params }: any) {
     throw new Response('Page not found', { status: 404 })
   }
 
-  return { page }
+  const content = new Markdown().safeRender(page.content)
+
+  return { page, content }
 }
 
 export function meta({ data }: any) {
@@ -27,11 +30,14 @@ export function meta({ data }: any) {
 }
 
 export default function ActivityPage() {
-  const { page } = useLoaderData()
+  const { content } = useLoaderData()
 
   return (
-    <pre className="text-red-400">
-      {JSON.stringify(page, null, 2)}
-    </pre>
+    <div className="page-wrapper">
+      {
+        /* eslint-disable-next-line react-dom/no-dangerously-set-innerhtml */
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      }
+    </div>
   )
 }
