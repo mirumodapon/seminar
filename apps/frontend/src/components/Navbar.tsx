@@ -17,11 +17,11 @@ function Navbar(props: Props) {
   })), [props.navItems])
 
   return (
-    <nav>
-      <ul>
+    <nav className="w-full bg-blue-400">
+      <ul className="flex">
         {navItems.map(item => (
-          <li key={item.to}>
-            <Link to={item.to}>{item.label}</Link>
+          <li className="grow" key={item.to}>
+            <Link className="block w-full text-center py-3" to={item.to}>{item.label}</Link>
           </li>
         ))}
       </ul>
