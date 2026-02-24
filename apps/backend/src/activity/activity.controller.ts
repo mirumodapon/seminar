@@ -1,6 +1,26 @@
-import { readFile, unlink } from 'node:fs/promises'
-import { extname } from 'node:path'
-import { BadRequestException, Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
+import type { Response } from 'express'
+import { createReadStream } from 'node:fs'
+import { readFile, stat, unlink } from 'node:fs/promises'
+import { extname, join } from 'node:path'
+import {
+  BadRequestException,
+  Body,
+  ConflictException,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Res,
+  StreamableFile,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { fromBuffer } from 'file-type'
 import { diskStorage } from 'multer'
@@ -163,5 +183,83 @@ export class ActivityController {
     const updatedActivity = await this.activityService.update(id, { banner: file.filename })
 
     return updatedActivity
+  }
+
+  @Get(':id/ogImage')
+  async getOgImage(@Param('id') id: string, @Res({ passthrough: true }) res: Response) {
+    const activity = await this.activityService.findOne(id)
+
+    if (!activity) {
+      throw new NotFoundException('找不到這個活動 RR')
+    }
+
+    if (!activity.ogImage) {
+      throw new NotFoundException('此活動沒有 OG 圖片')
+    }
+
+    const filePath = join('./uploads/ogImage', activity.ogImage)
+
+    try {
+      await stat(filePath)
+    }
+    catch {
+      throw new NotFoundException('圖片檔案不存在')
+    }
+
+    const file = createReadStream(filePath)
+    const ext = extname(activity.ogImage).toLowerCase()
+    const mimeTypes: Record<string, string> = {
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.gif': 'image/gif',
+      '.webp': 'image/webp',
+    }
+
+    res.set({
+      'Content-Type': mimeTypes[ext] || 'application/octet-stream',
+      'Content-Disposition': `inline; filename="${activity.ogImage}"`,
+    })
+
+    return new StreamableFile(file)
+  }
+
+  @Get(':id/banner')
+  async getBanner(@Param('id') id: string, @Res({ passthrough: true }) res: Response) {
+    const activity = await this.activityService.findOne(id)
+
+    if (!activity) {
+      throw new NotFoundException('找不到這個活動 RR')
+    }
+
+    if (!activity.banner) {
+      throw new NotFoundException('此活動沒有橫幅圖片')
+    }
+
+    const filePath = join('./uploads/banner', activity.banner)
+
+    try {
+      await stat(filePath)
+    }
+    catch {
+      throw new NotFoundException('圖片檔案不存在')
+    }
+
+    const file = createReadStream(filePath)
+    const ext = extname(activity.banner).toLowerCase()
+    const mimeTypes: Record<string, string> = {
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.gif': 'image/gif',
+      '.webp': 'image/webp',
+    }
+
+    res.set({
+      'Content-Type': mimeTypes[ext] || 'application/octet-stream',
+      'Content-Disposition': `inline; filename="${activity.banner}"`,
+    })
+
+    return new StreamableFile(file)
   }
 }
