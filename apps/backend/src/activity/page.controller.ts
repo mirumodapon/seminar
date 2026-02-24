@@ -1,4 +1,5 @@
-import { Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post } from '@nestjs/common'
+import { Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common'
+import { AdminGuard } from '../auth/guard'
 import { CreatePageDto } from './dto/create-page.dto'
 import { UpdatePageDto } from './dto/update-page.dto'
 import { PageService } from './page.service'
@@ -24,6 +25,7 @@ export class PageController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   async create(@Param('activityId') activityId: string, @Body() body: CreatePageDto) {
     const exists = await this.pageService.findOneIncludingDeleted(activityId, body.pageId)
 
@@ -39,6 +41,7 @@ export class PageController {
   }
 
   @Patch(':pageId')
+  @UseGuards(AdminGuard)
   async update(
     @Param('activityId') activityId: string,
     @Param('pageId') pageId: string,
@@ -55,6 +58,7 @@ export class PageController {
 
   @Delete(':pageId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AdminGuard)
   async remove(@Param('activityId') activityId: string, @Param('pageId') pageId: string) {
     const affect = await this.pageService.remove(activityId, pageId)
 

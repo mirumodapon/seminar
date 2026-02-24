@@ -1,9 +1,11 @@
 import { Link, useLoaderData } from 'react-router'
 import { api } from '~/service/api'
 
-export async function loader() {
+export async function loader({ request }: any) {
+  const Cookie = request.headers.get('Cookie')
+
   try {
-    const response = await api('/activity')
+    const response = await api('/activity', { headers: { Cookie } })
     return { activities: response.data }
   }
   catch (err: any) {

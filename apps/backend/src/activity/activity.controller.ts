@@ -1,9 +1,10 @@
 import { readFile, unlink } from 'node:fs/promises'
 import { extname } from 'node:path'
-import { BadRequestException, Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { BadRequestException, Body, ConflictException, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { fromBuffer } from 'file-type'
 import { diskStorage } from 'multer'
+import { AdminGuard } from '../auth/guard'
 import { ActivityService } from './activity.service'
 import { CreateActivityDto } from './dto/create-activity.dto'
 import { UpdateActivityDto } from './dto/update-activity.dto'
@@ -13,6 +14,7 @@ export class ActivityController {
   constructor(private readonly activityService: ActivityService) { }
 
   @Get()
+  @UseGuards(AdminGuard)
   findAll() {
     return this.activityService.findAll()
   }
@@ -29,6 +31,7 @@ export class ActivityController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   async create(@Body() body: CreateActivityDto) {
     const exists = await this.activityService.findOne(body.activityId)
 
@@ -40,6 +43,7 @@ export class ActivityController {
   }
 
   @Post(':id')
+  @UseGuards(AdminGuard)
   async recover(@Param('id') id: string) {
     const activity = await this.activityService.recover(id)
 
@@ -51,6 +55,7 @@ export class ActivityController {
   }
 
   @Patch(':id')
+  @UseGuards(AdminGuard)
   async update(@Param('id') id: string, @Body() updateActivityDto: UpdateActivityDto) {
     const activity = await this.activityService.update(id, updateActivityDto)
 
@@ -63,6 +68,7 @@ export class ActivityController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AdminGuard)
   async remove(@Param('id') id: string) {
     const affect = await this.activityService.remove(id)
 
@@ -72,6 +78,7 @@ export class ActivityController {
   }
 
   @Post(':id/ogImage')
+  @UseGuards(AdminGuard)
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads/ogImage',
@@ -115,6 +122,7 @@ export class ActivityController {
   }
 
   @Post(':id/banner')
+  @UseGuards(AdminGuard)
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads/banner',
