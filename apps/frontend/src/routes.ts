@@ -3,6 +3,7 @@ import { route } from '@react-router/dev/routes'
 
 const routes: RouteConfig = [
   route('admin', 'pages/AdminPage.tsx'),
+  route('admin/:activityId', 'pages/ActivityManagePage.tsx'),
   route('apply', 'pages/ApplyPage.tsx'),
   route(':activityId', 'layouts/ActivityPageLayout.tsx', [
     route('', 'pages/ActivityHomePage.tsx'),
