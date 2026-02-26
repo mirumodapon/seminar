@@ -3,6 +3,10 @@ import { registerAs } from '@nestjs/config'
 export default [
   registerAs('app', () => ({
     port: Number(process.env.PORT) || 3000,
+    cors: {
+      origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+      credentials: true,
+    },
     session: {
       secret: process.env.SESSION_SECRET,
       resave: false,
