@@ -2,7 +2,6 @@ import type { Request, Response } from 'express'
 import { BadRequestException, Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service'
-import { UserGuard } from './guard'
 
 @Controller('auth')
 export class AuthController {
@@ -42,7 +41,6 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(UserGuard)
   async me(@Session() session: Record<string, any>, @Res() res: Response) {
     const user = session.user
 
