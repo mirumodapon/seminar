@@ -30,14 +30,20 @@ export function meta({ data }: any) {
 }
 
 export default function ActivityPage() {
-  const { content } = useLoaderData()
+  const { page, content } = useLoaderData()
 
   return (
-    <div className="page-wrapper">
-      {
+    <div className="w-10/12 mx-auto">
+      <img
+        className="w-full"
+        src={`/api/activity/${page.activityId}/banner`}
+        alt="banner"
+      />
+      <div
+        className="prose p-2"
         /* eslint-disable-next-line react-dom/no-dangerously-set-innerhtml */
-        <div dangerouslySetInnerHTML={{ __html: content }} />
-      }
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   )
 }
