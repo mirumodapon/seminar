@@ -1,5 +1,5 @@
-import type { Request } from 'express'
-import { BadRequestException, Controller, Get, Req, Session, UseGuards } from '@nestjs/common'
+import type { Request, Response } from 'express'
+import { BadRequestException, Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service'
 
@@ -38,5 +38,15 @@ export class AuthController {
     // TODO: redirect
 
     return dbUser
+  }
+
+  @Get('me')
+  async me(@Session() session: Record<string, any>, @Res() res: Response) {
+    const user = session.user
+
+    if (user)
+      return res.redirect('/apply')
+
+    return res.redirect('/api/auth/google')
   }
 }

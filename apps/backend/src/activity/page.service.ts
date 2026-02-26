@@ -8,36 +8,68 @@ import { UpdatePageDto } from './dto/update-page.dto'
 export class PageService {
   constructor(@Inject(KNEX_PROVIDER) private readonly knex: Knex) { }
 
-  async createPage(activityId: string, payload: CreatePageDto) {
-    await this.knex('page')
-      .insert({ activityId, ...payload })
-
-    return this.findPageById(activityId, payload.pageId)
-  }
-
-  findPageById(activityId: string, pageId: string) {
+  findAll(activityId: string) {
     return this.knex('page')
       .where('activityId', activityId)
-      .andWhere('pageId', pageId)
+      .whereNull('deletedAt')
+      .select('*')
+  }
+
+  findOne(activityId: string, pageId: string) {
+    return this.knex('page')
+      .where('activityId', activityId)
+      .where('pageId', pageId)
+      .whereNull('deletedAt')
       .first()
   }
 
-  async updatePage(activityId: string, pageId: string, payload: UpdatePageDto) {
-    await this.knex('page')
-      .update(payload)
-      .where('activityId', activityId)
-      .andWhere('pageId', pageId)
-
-    return this.findPageById(activityId, payload.pageId || pageId)
-  }
-
-  deletePage(activityId: string, pageId: string) {
+  findOneIncludingDeleted(activityId: string, pageId: string) {
     return this.knex('page')
       .where('activityId', activityId)
-      .andWhere('pageId', pageId)
+      .where('pageId', pageId)
+      .first()
+  }
+
+  async create(activityId: string, payload: CreatePageDto) {
+    await this.knex('page')
+      .insert({
+        ...payload,
+        activityId,
+      })
+
+    return this.findOne(activityId, payload.pageId)
+  }
+
+  async restore(activityId: string, pageId: string, payload: CreatePageDto) {
+    await this.knex('page')
+      .where('activityId', activityId)
+      .where('pageId', pageId)
+      .update({
+        ...payload,
+        deletedAt: null,
+        updatedAt: this.knex.fn.now(),
+      })
+
+    return this.findOne(activityId, pageId)
+  }
+
+  async update(activityId: string, pageId: string, payload: UpdatePageDto) {
+    await this.knex('page')
+      .where('activityId', activityId)
+      .where('pageId', pageId)
+      .update(payload)
+
+    return this.findOne(activityId, pageId)
+  }
+
+  remove(activityId: string, pageId: string) {
+    return this.knex('page')
+      .where('activityId', activityId)
+      .where('pageId', pageId)
+      .whereNull('deletedAt')
       .update({
         deletedAt: this.knex.fn.now(),
-        updatedAt: this.knex.fn.now(),
+        updatedAt: this.knex.column('updatedAt'),
       })
   }
 }

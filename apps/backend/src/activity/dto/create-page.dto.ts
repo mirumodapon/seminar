@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator'
+import { IsString, MaxLength } from 'class-validator'
 
 export class CreatePageDto {
   @IsString()
@@ -6,24 +6,13 @@ export class CreatePageDto {
   pageId: string
 
   @IsString()
-  @IsOptional()
-  content?: string
+  @MaxLength(50)
+  title: string
 
   @IsString()
-  @MaxLength(255)
-  @IsOptional()
-  title?: string
+  @MaxLength(100)
+  description: string
 
   @IsString()
-  @IsOptional()
-  description?: string
-
-  @IsString()
-  @MaxLength(255)
-  @IsOptional()
-  author?: string
-
-  @IsBoolean()
-  @IsOptional()
-  draft?: boolean
+  content: string
 }

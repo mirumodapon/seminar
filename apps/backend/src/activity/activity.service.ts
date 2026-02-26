@@ -8,33 +8,62 @@ import { UpdateActivityDto } from './dto/update-activity.dto'
 export class ActivityService {
   constructor(@Inject(KNEX_PROVIDER) private readonly knex: Knex) { }
 
-  async createActivity(payload: CreateActivityDto) {
+  findAll() {
+    return this.knex('activity')
+      .whereNull('deletedAt')
+      .select('*')
+  }
+
+  async findOne(id: string) {
+    const [activity, pages] = await Promise.all([
+
+      this.knex('activity')
+        .where('activityId', id)
+        .whereNull('deletedAt')
+        .first(),
+      this.knex('page')
+        .select(['pageId', 'title'])
+        .where('activityId', id)
+        .whereNull('deletedAt'),
+    ])
+
+    return {
+      ...activity,
+      pages,
+    }
+  }
+
+  async create(payload: CreateActivityDto) {
     await this.knex('activity')
       .insert(payload)
 
-    return this.findActivityById(payload.activityId)
+    return this.findOne(payload.activityId)
   }
 
-  findActivityById(activityId: string) {
-    return this.knex('activity')
-      .where('activityId', activityId)
-      .first()
-  }
-
-  async updateActivity(activityId: string, payload: UpdateActivityDto) {
+  async update(id: string, payload: UpdateActivityDto) {
     await this.knex('activity')
+      .where('activityId', id)
       .update(payload)
-      .where('activityId', activityId)
 
-    return this.findActivityById(payload.activityId || activityId)
+    return this.findOne(id)
   }
 
-  deleteActivity(activityId: string) {
+  remove(id: string) {
     return this.knex('activity')
-      .where('activityId', activityId)
+      .where('activityId', id)
+      .whereNull('deletedAt')
       .update({
         deletedAt: this.knex.fn.now(),
         updatedAt: this.knex.column('updatedAt'),
       })
+  }
+
+  async recover(id: string) {
+    await this.knex('activity')
+      .where('activityId', id)
+      .whereNotNull('deletedAt')
+      .update({ deletedAt: null })
+
+    return this.findOne(id)
   }
 }

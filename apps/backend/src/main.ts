@@ -10,6 +10,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ConfigService)
   const redis = app.get(REDIS_PROVIDER)
+  const cors = config.get('app.cors')
+
+  app.enableCors(cors)
 
   app.use(session({
     ...config.get<SessionOptions>('app.session', { secret: '' }),

@@ -1,5 +1,4 @@
 import type { Route } from '../app/+types/root'
-
 import {
   isRouteErrorResponse,
   Links,
@@ -8,6 +7,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router'
+import useEasterEgg from './hooks/useEasterEgg'
+
+import './tailwind.css'
 
 export const links: Route.LinksFunction = () => []
 export const meta: Route.MetaFunction = () => [{ title: 'Seminar' }]
@@ -31,6 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEasterEgg()
   return <Outlet />
 }
 
