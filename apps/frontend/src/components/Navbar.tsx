@@ -13,7 +13,7 @@ interface Props {
 function Navbar(props: Props) {
   const navItems = useMemo(() => props.navItems.map(item => ({
     label: item.title,
-    to: item.pageId,
+    to: item.pageId === 'HOME' ? '' : item.pageId,
   })), [props.navItems])
 
   return (
