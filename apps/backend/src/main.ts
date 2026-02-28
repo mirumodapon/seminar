@@ -7,6 +7,7 @@ import { Knex } from 'knex'
 import { AppModule } from './app.module'
 import { KNEX_PROVIDER } from './database/knex/knex.constant'
 import { REDIS_PROVIDER } from './database/redis/redis.constant'
+import { handleFrontendServerComponents } from './middleware/frontend.middleware'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -15,6 +16,8 @@ async function bootstrap() {
   const cors = config.get('app.cors')
 
   app.enableCors(cors)
+
+  handleFrontendServerComponents(app, config.get('frontend')!.resource)
 
   app.use(session({
     ...config.get<SessionOptions>('app.session', { secret: '' }),
