@@ -3,7 +3,9 @@ import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { RedisStore } from 'connect-redis'
 import session, { SessionOptions } from 'express-session'
+import { Knex } from 'knex'
 import { AppModule } from './app.module'
+import { KNEX_PROVIDER } from './database/knex/knex.constant'
 import { REDIS_PROVIDER } from './database/redis/redis.constant'
 
 async function bootstrap() {
@@ -26,6 +28,11 @@ async function bootstrap() {
       exposeUnsetFields: false,
     },
   }))
+
+  if (process.env.NODE_ENV === 'production') {
+    const knex: Knex = app.get(KNEX_PROVIDER)
+    await knex.migrate.latest()
+  }
 
   app.setGlobalPrefix('api')
   await app.listen(config.get('app.port')!)
