@@ -1,0 +1,28 @@
+
+services:
+  seminar-backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      - SESSION_SECRET=
+      - DB_HOST=
+      - DB_PORT=
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_DATABASE=
+      - REDIS_URL=
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - GOOGLE_CALLBACK_URL=
+      - GOOGLE_OAUTH_SCOPE=
+
+
+  seminar-frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=/api
