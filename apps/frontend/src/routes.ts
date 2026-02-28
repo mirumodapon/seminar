@@ -2,6 +2,7 @@ import type { RouteConfig } from '@react-router/dev/routes'
 import { route } from '@react-router/dev/routes'
 
 const routes: RouteConfig = [
+  route('', 'pages/HomePage.tsx'),
   route('admin', 'pages/AdminPage.tsx'),
   route('admin/:activityId', 'pages/ActivityManagePage.tsx'),
   route('apply', 'pages/ApplyPage.tsx'),

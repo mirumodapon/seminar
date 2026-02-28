@@ -9,6 +9,7 @@ export class PageController {
   constructor(private readonly pageService: PageService) { }
 
   @Get()
+  @UseGuards(AdminGuard)
   findAll(@Param('activityId') activityId: string) {
     return this.pageService.findAll(activityId)
   }

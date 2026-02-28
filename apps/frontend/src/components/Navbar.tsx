@@ -13,7 +13,7 @@ interface Props {
 function Navbar(props: Props) {
   const navItems = useMemo(() => props.navItems.map(item => ({
     label: item.title,
-    to: item.pageId,
+    to: item.pageId === 'HOME' ? '' : item.pageId,
   })), [props.navItems])
 
   return (
@@ -24,10 +24,6 @@ function Navbar(props: Props) {
             <Link className="block w-full text-center py-3" to={item.to}>{item.label}</Link>
           </li>
         ))}
-
-        <li className="grow">
-          <a className="block w-full text-center py-3" href="/api/auth/me">我要投稿</a>
-        </li>
       </ul>
     </nav>
   )

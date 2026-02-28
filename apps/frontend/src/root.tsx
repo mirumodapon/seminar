@@ -42,7 +42,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let details = 'An unexpected error occurred.'
   let stack: string | undefined
 
-  if (isRouteErrorResponse(error)) {
+  if (error.status === 401) {
+    message = '401'
+    details = '你沒有權限看這個頁面喔！！'
+  }
+  else if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? '404' : 'Error'
     details
       = error.status === 404

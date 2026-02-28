@@ -16,6 +16,7 @@ interface Page {
   title: string
   description: string
   content: string
+  order: number
 }
 
 type PageFormState = { mode: null } | ({ mode: 'create' | 'edit' } & Partial<Page>)
@@ -207,7 +208,7 @@ function ActivityManagePage() {
           <h2 className="text-xl font-semibold">頁面管理</h2>
           <button
             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            onClick={() => setPageForm({ mode: 'create', pageId: '', title: '', description: '', content: '' })}
+            onClick={() => setPageForm({ mode: 'create', pageId: '', title: '', description: '', content: '', order: 0 })}
           >
             新增頁面
           </button>
@@ -224,6 +225,11 @@ function ActivityManagePage() {
                   (
                   {page.pageId}
                   )
+                </span>
+                <span className="text-gray-400 text-sm ml-2">
+                  order:
+                  {' '}
+                  {page.order}
                 </span>
               </div>
               <div className="flex gap-2">
@@ -255,6 +261,16 @@ function ActivityManagePage() {
               </h3>
 
               <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">順序 (Order)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    className="w-full border rounded px-3 py-2"
+                    value={pageForm.order ?? 0}
+                    onChange={e => setPageForm(prev => ({ ...prev, order: Number(e.target.value) }))}
+                  />
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">頁面 ID</label>
                   <input
