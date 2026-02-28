@@ -22,9 +22,10 @@ export class ActivityService {
         .whereNull('deletedAt')
         .first(),
       this.knex('page')
-        .select(['pageId', 'title'])
+        .select(['pageId', 'title', 'order'])
         .where('activityId', id)
-        .whereNull('deletedAt'),
+        .whereNull('deletedAt')
+        .orderBy('order', 'asc'),
     ])
 
     return {

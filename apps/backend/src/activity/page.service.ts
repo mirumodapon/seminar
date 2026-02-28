@@ -31,9 +31,19 @@ export class PageService {
   }
 
   async create(activityId: string, payload: CreatePageDto) {
+    let order = payload.order
+    if (order === undefined) {
+      const result = await this.knex('page')
+        .where('activityId', activityId)
+        .max('order as maxOrder')
+        .first()
+      order = result?.maxOrder != null ? result.maxOrder + 1 : 0
+    }
+
     await this.knex('page')
       .insert({
         ...payload,
+        order,
         activityId,
       })
 
