@@ -17,6 +17,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(
     @Req() req: Request,
+    @Res() res: Response,
     @Session() session: Record<string, any>,
   ) {
     const user = (req as any).user // FIX: any type
@@ -35,7 +36,7 @@ export class AuthController {
     }
 
     session.user = dbUser
-    // TODO: redirect
+    res.redirect('https://seminar.nptucsai.org/')
 
     return dbUser
   }
