@@ -9,11 +9,18 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile;
 RUN pnpm run --filter @seminar/backend build;
+RUN pnpm run --filter @seminar/frontend build;
+
 RUN pnpm deploy --filter @seminar/backend --prod /usr/prod/backend;
+RUN pnpm deploy --filter @seminar/frontend --prod /usr/prod/frontend;
+
 
 FROM base AS prod
 COPY --from=build /usr/prod/backend /app
+COPY --from=build /usr/prod/frontend /app
 WORKDIR /app
+
+ENV FRONTEND_RESOURCE=/app/build
 
 EXPOSE 3000
 ENTRYPOINT ["pnpm", "start:prod"]
