@@ -13,10 +13,10 @@ interface Apply {
   status: string
   accepted: boolean
   attended: boolean
-  vegetables: boolean
+  vegetables: boolean | null
   diningHibits: string | null
   slides: string | null
-  poster: string | null
+  updatedAt: string | null
 }
 
 type FormState = { mode: null } | ({ mode: 'create' | 'edit' } & Partial<Apply>)
@@ -45,6 +45,7 @@ const EMPTY_FORM: Partial<Apply> = {
   abstract: '',
   school: '',
   department: '',
+  attended: false,
   vegetables: false,
   diningHibits: '',
 }
@@ -186,12 +187,13 @@ function ApplyPage() {
                         ·
                         {' '}
                         {apply.department}
-                        {' '}
-                        ·
-                        {' '}
-                        活動：
-                        {apply.activityId}
                       </p>
+                      {apply.updatedAt && (
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          最後更新：
+                          {new Date(apply.updatedAt).toLocaleString('zh-TW')}
+                        </p>
+                      )}
                     </div>
                     <span className={`px-2 py-1 rounded text-sm font-medium ${
                       apply.status === 'accepted'
@@ -210,7 +212,12 @@ function ApplyPage() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       className="px-3 py-1.5 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-sm"
-                      onClick={() => setForm({ mode: 'edit', ...apply })}
+                      onClick={() => setForm({
+                        mode: 'edit',
+                        ...apply,
+                        attended: Boolean(apply.attended),
+                        vegetables: apply.vegetables != null ? Boolean(apply.vegetables) : null,
+                      })}
                     >
                       編輯
                     </button>
@@ -301,26 +308,45 @@ function ApplyPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">葷素</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">是否出席</label>
                 <select
                   className="w-full border rounded px-3 py-2 bg-white"
-                  value={form.vegetables ? 'true' : 'false'}
-                  onChange={e => setForm(prev => ({ ...prev, vegetables: e.target.value === 'true' }))}
+                  value={form.attended ? 'true' : 'false'}
+                  onChange={e => setForm(prev => ({
+                    ...prev,
+                    attended: e.target.value === 'true',
+                    ...(e.target.value === 'false' && { vegetables: null, diningHibits: null }),
+                  }))}
                 >
-                  <option value="false">葷食</option>
-                  <option value="true">素食</option>
+                  <option value="false">不出席</option>
+                  <option value="true">出席</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">飲食習慣（備註）</label>
-                <textarea
-                  className="w-full border rounded px-3 py-2 text-sm"
-                  rows={2}
-                  placeholder="過敏原、其他飲食限制等"
-                  value={form.diningHibits ?? ''}
-                  onChange={e => setForm(prev => ({ ...prev, diningHibits: e.target.value }))}
-                />
-              </div>
+              {form.attended && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">葷素</label>
+                    <select
+                      className="w-full border rounded px-3 py-2 bg-white"
+                      value={form.vegetables ? 'true' : 'false'}
+                      onChange={e => setForm(prev => ({ ...prev, vegetables: e.target.value === 'true' }))}
+                    >
+                      <option value="false">葷食</option>
+                      <option value="true">素食</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">飲食習慣（備註）</label>
+                    <textarea
+                      className="w-full border rounded px-3 py-2 text-sm"
+                      rows={2}
+                      placeholder="過敏原、其他飲食限制等"
+                      value={form.diningHibits ?? ''}
+                      onChange={e => setForm(prev => ({ ...prev, diningHibits: e.target.value }))}
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex justify-end gap-3 mt-6">

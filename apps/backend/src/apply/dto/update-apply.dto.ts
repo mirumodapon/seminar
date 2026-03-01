@@ -27,6 +27,10 @@ export class UpdateApplyDto {
 
   @IsBoolean()
   @IsOptional()
+  attended?: boolean
+
+  @IsBoolean()
+  @IsOptional()
   vegetables?: boolean
 
   @IsString()
