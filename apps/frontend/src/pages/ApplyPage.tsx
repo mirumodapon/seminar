@@ -61,6 +61,7 @@ function ApplyPage() {
   const slidesInputRef = useRef<HTMLInputElement>(null)
   const posterInputRef = useRef<HTMLInputElement>(null)
   const [uploadingFor, setUploadingFor] = useState<{ applyId: number, type: 'slides' | 'poster' } | null>(null)
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   async function handleSubmit() {
     if (form.mode === null) return
@@ -85,6 +86,7 @@ function ApplyPage() {
 
   async function handleFileUpload(applyId: number, type: 'slides' | 'poster', file: File) {
     setError(null)
+    setUploadProgress(0)
     const formData = new FormData()
     formData.append('file', file)
 
@@ -92,6 +94,10 @@ function ApplyPage() {
       await api.post(`/apply/me/${applyId}/${type}`, formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (e) => {
+          const percent = e.total ? Math.round((e.loaded * 100) / e.total) : 0
+          setUploadProgress(percent)
+        },
       })
       setSuccess(`${type === 'slides' ? '簡報' : '海報'}上傳成功！`)
       revalidate()
@@ -101,6 +107,7 @@ function ApplyPage() {
     }
     finally {
       setUploadingFor(null)
+      setUploadProgress(0)
     }
   }
 
@@ -211,7 +218,8 @@ function ApplyPage() {
 
                   <div className="flex flex-wrap gap-2">
                     <button
-                      className="px-3 py-1.5 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-sm"
+                      className="px-3 py-1.5 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={uploadingFor?.applyId === apply.applyId}
                       onClick={() => setForm({
                         mode: 'edit',
                         ...apply,
@@ -222,18 +230,42 @@ function ApplyPage() {
                       編輯
                     </button>
                     <button
-                      className={`px-3 py-1.5 rounded text-sm text-white ${apply.slides ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 hover:bg-gray-500'}`}
+                      className={`px-3 py-1.5 rounded text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed ${apply.slides ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 hover:bg-gray-500'}`}
+                      disabled={uploadingFor?.applyId === apply.applyId}
                       onClick={() => triggerUpload(apply.applyId, 'slides')}
                     >
                       {apply.slides ? '重新上傳簡報' : '上傳簡報'}
                     </button>
                     <button
-                      className={`px-3 py-1.5 rounded text-sm text-white ${apply.poster ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 hover:bg-gray-500'}`}
+                      className={`px-3 py-1.5 rounded text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed ${apply.poster ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 hover:bg-gray-500'}`}
+                      disabled={uploadingFor?.applyId === apply.applyId}
                       onClick={() => triggerUpload(apply.applyId, 'poster')}
                     >
                       {apply.poster ? '重新上傳海報' : '上傳海報'}
                     </button>
                   </div>
+
+                  {uploadingFor?.applyId === apply.applyId && (
+                    <div className="mt-3">
+                      <div className="flex justify-between text-xs text-gray-500 mb-1">
+                        <span>
+                          上傳
+                          {uploadingFor.type === 'slides' ? '簡報' : '海報'}
+                          中...
+                        </span>
+                        <span>
+                          {uploadProgress}
+                          %
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-blue-500 h-2 rounded-full transition-all duration-200"
+                          style={{ width: `${uploadProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
