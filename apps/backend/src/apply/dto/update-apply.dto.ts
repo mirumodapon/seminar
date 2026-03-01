@@ -20,6 +20,11 @@ export class UpdateApplyDto {
   @IsOptional()
   department?: string
 
+  @IsString()
+  @MaxLength(255)
+  @IsOptional()
+  author?: string
+
   @IsBoolean()
   @IsOptional()
   vegetables?: boolean
