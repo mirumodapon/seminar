@@ -5,6 +5,7 @@ import { api } from '~/service/api'
 interface Apply {
   applyId: number
   activityId: string
+  author: string | null
   topic: string
   abstract: string
   school: string
@@ -39,6 +40,7 @@ export async function loader({ request }: any) {
 
 const EMPTY_FORM: Partial<Apply> = {
   activityId: '',
+  author: '',
   topic: '',
   abstract: '',
   school: '',
@@ -260,6 +262,15 @@ function ApplyPage() {
                 />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">作者</label>
+                <input
+                  className="w-full border rounded px-3 py-2"
+                  placeholder="請輸入作者姓名"
+                  value={form.author ?? ''}
+                  onChange={e => setForm(prev => ({ ...prev, author: e.target.value }))}
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">摘要</label>
                 <textarea
                   className="w-full border rounded px-3 py-2 text-sm"
@@ -290,14 +301,15 @@ function ApplyPage() {
                 </div>
               </div>
               <div>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={form.vegetables ?? false}
-                    onChange={e => setForm(prev => ({ ...prev, vegetables: e.target.checked }))}
-                  />
-                  <span className="text-sm font-medium text-gray-700">素食</span>
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">葷素</label>
+                <select
+                  className="w-full border rounded px-3 py-2 bg-white"
+                  value={form.vegetables ? 'true' : 'false'}
+                  onChange={e => setForm(prev => ({ ...prev, vegetables: e.target.value === 'true' }))}
+                >
+                  <option value="false">葷食</option>
+                  <option value="true">素食</option>
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">飲食習慣（備註）</label>
