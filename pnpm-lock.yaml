@@ -57,6 +57,9 @@ importers:
       connect-redis:
         specifier: ^9.0.0
         version: 9.0.0(express-session@1.18.2)(redis@5.10.0)
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
       express-session:
         specifier: ^1.18.2
         version: 1.18.2
