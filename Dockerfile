@@ -11,13 +11,12 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run --filter @seminar/backend build;
 RUN pnpm run --filter @seminar/frontend build;
 
-RUN pnpm deploy --filter @seminar/backend --prod /usr/prod/backend;
 RUN pnpm deploy --filter @seminar/frontend --prod /usr/prod/frontend;
-
+RUN pnpm deploy --filter @seminar/backend --prod /usr/prod/backend;
 
 FROM base AS prod
-COPY --from=build /usr/prod/backend /app
 COPY --from=build /usr/prod/frontend /app
+COPY --from=build /usr/prod/backend /app
 WORKDIR /app
 
 ENV FRONTEND_RESOURCE=/app/build
