@@ -17,6 +17,10 @@ RUN pnpm deploy --filter @seminar/backend --prod /usr/prod/backend;
 FROM base AS prod
 COPY --from=build /usr/prod/frontend /app
 COPY --from=build /usr/prod/backend /app
+
+RUN mkdir -p /app/migrations;
+RUN cp /app/dist/migrations/*.js /app/migrations;
+
 WORKDIR /app
 
 ENV FRONTEND_RESOURCE=/app/build
