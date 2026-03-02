@@ -55,7 +55,7 @@ export class ActivityController {
   async create(@Body() body: CreateActivityDto) {
     const exists = await this.activityService.findOne(body.activityId)
 
-    if (exists) {
+    if (exists.activityId) {
       throw new ConflictException('這個活動已經存在了')
     }
 
