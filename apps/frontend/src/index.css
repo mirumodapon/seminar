@@ -26,6 +26,8 @@
   background: var(--bg);
   color: var(--text);
   border-color: var(--bg);
+
+  margin: 12px 0;
 }
 
 .container p {
