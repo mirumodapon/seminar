@@ -9,6 +9,7 @@ import {
 } from 'react-router'
 import useEasterEgg from './hooks/useEasterEgg'
 
+import './index.css'
 import './tailwind.css'
 
 export const links: Route.LinksFunction = () => []

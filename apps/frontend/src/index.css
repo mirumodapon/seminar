@@ -1,0 +1,33 @@
+.container-warning {
+  --bg: #FEF7DD;
+  --text: #F59E0B;
+}
+
+.container-error, .container-danger {
+  --bg: #FEEDEC;
+  --text: #EF4444;
+}
+
+
+.container-success {
+  --bg: #D9F9E5;
+  --text: #44946C;
+}
+
+.container-info {
+  --bg: #E0F2FE;
+  --text: #0584C7;
+}
+
+.container {
+  border-radius: 10px;
+  border: 1px solid var(--text);
+
+  background: var(--bg);
+  color: var(--text);
+  border-color: var(--bg);
+}
+
+.container p {
+  margin: 12px 16px;
+}

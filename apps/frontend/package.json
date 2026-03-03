@@ -10,6 +10,14 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@mdit/plugin-attrs": "^0.25.1",
+    "@mdit/plugin-container": "^0.23.1",
+    "@mdit/plugin-img-size": "^0.23.1",
+    "@mdit/plugin-ins": "^0.23.1",
+    "@mdit/plugin-mark": "^0.23.1",
+    "@mdit/plugin-sub": "^0.24.1",
+    "@mdit/plugin-sup": "^0.24.1",
+    "@mdit/plugin-tasklist": "^0.23.1",
     "@react-router/node": "7.12.0",
     "@react-router/serve": "7.12.0",
     "axios": "^1.13.5",
