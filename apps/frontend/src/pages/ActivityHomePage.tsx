@@ -40,7 +40,7 @@ export default function ActivityPage() {
         alt="banner"
       />
       <div
-        className="prose p-2"
+        className="prose p-2 w-full"
         /* eslint-disable-next-line react-dom/no-dangerously-set-innerhtml */
         dangerouslySetInnerHTML={{ __html: content }}
       />
