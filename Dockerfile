@@ -2,6 +2,7 @@ FROM node:22-slim AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+ENV VITE_API_URL=/api
 RUN corepack enable
 
 FROM base AS build
