@@ -24,6 +24,10 @@ function Navbar(props: Props) {
             <Link className="block w-full text-center py-3" to={item.to}>{item.label}</Link>
           </li>
         ))}
+
+        <li className="grow">
+          <Link className="block w-full text-center py-3" to="apply">我要投稿</Link>
+        </li>
       </ul>
     </nav>
   )
