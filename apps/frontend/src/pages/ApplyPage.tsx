@@ -31,7 +31,7 @@ export async function loader({ request }: any) {
   catch (err: any) {
     const status = err.response?.status
     if (status === 401 || status === 403) {
-      throw redirect('/api/auth/google')
+      throw redirect('/login')
     }
     const response = err.response?.data
     throw new Response(response?.message ?? 'Error', { status: response?.statusCode ?? 500 })
