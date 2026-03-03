@@ -18,14 +18,14 @@ function Navbar(props: Props) {
 
   return (
     <nav className="w-full bg-blue-400">
-      <ul className="flex">
+      <ul className="flex flex-wrap">
         {navItems.map(item => (
-          <li className="grow" key={item.to}>
+          <li className="grow min-w-25" key={item.to}>
             <Link className="block w-full text-center py-3" to={item.to}>{item.label}</Link>
           </li>
         ))}
 
-        <li className="grow">
+        <li className="grow min-w-25">
           <Link className="block w-full text-center py-3" to="apply">我要投稿</Link>
         </li>
       </ul>
