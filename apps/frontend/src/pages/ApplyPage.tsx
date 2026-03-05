@@ -8,8 +8,6 @@ interface Apply {
   author: string | null
   topic: string
   abstract: string
-  school: string
-  department: string
   status: string
   accepted: boolean
   attended: boolean
@@ -46,8 +44,6 @@ const EMPTY_FORM: Partial<Apply> = {
   author: '',
   topic: '',
   abstract: '',
-  school: '',
-  department: '',
   keywords: '',
   email: '',
 }
@@ -190,13 +186,6 @@ function ApplyPage() {
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="text-lg font-semibold">{apply.topic}</h3>
-                      <p className="text-sm text-gray-500">
-                        {apply.school}
-                        {' '}
-                        ·
-                        {' '}
-                        {apply.department}
-                      </p>
                       {apply.updatedAt && (
                         <p className="text-xs text-gray-400 mt-0.5">
                           最後更新：
@@ -303,12 +292,14 @@ function ApplyPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">作者</label>
-                <input
-                  className="w-full border rounded px-3 py-2"
-                  placeholder="請輸入作者姓名"
+                <textarea
+                  className="w-full border rounded px-3 py-2 text-sm"
+                  rows={3}
+                  placeholder="王小明, 國立屏東大學, 電腦科學系"
                   value={form.author ?? ''}
                   onChange={e => setForm(prev => ({ ...prev, author: e.target.value }))}
                 />
+                <p className="text-xs text-gray-400 mt-1">每位作者佔一行，姓名、學校、系所以逗號隔開</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">電子郵件</label>
@@ -338,26 +329,6 @@ function ApplyPage() {
                   value={form.keywords ?? ''}
                   onChange={e => setForm(prev => ({ ...prev, keywords: e.target.value }))}
                 />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">學校</label>
-                  <input
-                    className="w-full border rounded px-3 py-2"
-                    placeholder="請輸入學校"
-                    value={form.school ?? ''}
-                    onChange={e => setForm(prev => ({ ...prev, school: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">系所</label>
-                  <input
-                    className="w-full border rounded px-3 py-2"
-                    placeholder="請輸入系所"
-                    value={form.department ?? ''}
-                    onChange={e => setForm(prev => ({ ...prev, department: e.target.value }))}
-                  />
-                </div>
               </div>
               {form.status === 'accepted' && (
                 <>

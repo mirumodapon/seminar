@@ -14,14 +14,6 @@ export class CreateApplyDto {
 
   @IsString()
   @MaxLength(255)
-  school: string
-
-  @IsString()
-  @MaxLength(255)
-  department: string
-
-  @IsString()
-  @MaxLength(255)
   @IsOptional()
   author?: string
 
