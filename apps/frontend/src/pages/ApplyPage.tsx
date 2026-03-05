@@ -13,9 +13,12 @@ interface Apply {
   status: string
   accepted: boolean
   attended: boolean
-  vegetables: boolean | null
+  keywords: string | null
+  email: string | null
+  meal: string | null
   diningHibits: string | null
   slides: string | null
+  poster: string | null
   updatedAt: string | null
 }
 
@@ -46,7 +49,9 @@ const EMPTY_FORM: Partial<Apply> = {
   school: '',
   department: '',
   attended: false,
-  vegetables: false,
+  keywords: '',
+  email: '',
+  meal: 'NORMAL',
   diningHibits: '',
 }
 
@@ -224,7 +229,6 @@ function ApplyPage() {
                         mode: 'edit',
                         ...apply,
                         attended: Boolean(apply.attended),
-                        vegetables: apply.vegetables != null ? Boolean(apply.vegetables) : null,
                       })}
                     >
                       編輯
@@ -310,6 +314,16 @@ function ApplyPage() {
                 />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">電子郵件</label>
+                <input
+                  type="email"
+                  className="w-full border rounded px-3 py-2"
+                  placeholder="請輸入電子郵件"
+                  value={form.email ?? ''}
+                  onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">摘要</label>
                 <textarea
                   className="w-full border rounded px-3 py-2 text-sm"
@@ -317,6 +331,15 @@ function ApplyPage() {
                   placeholder="請輸入摘要"
                   value={form.abstract ?? ''}
                   onChange={e => setForm(prev => ({ ...prev, abstract: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">關鍵字</label>
+                <input
+                  className="w-full border rounded px-3 py-2"
+                  placeholder="請輸入關鍵字"
+                  value={form.keywords ?? ''}
+                  onChange={e => setForm(prev => ({ ...prev, keywords: e.target.value }))}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -347,7 +370,7 @@ function ApplyPage() {
                   onChange={e => setForm(prev => ({
                     ...prev,
                     attended: e.target.value === 'true',
-                    ...(e.target.value === 'false' && { vegetables: null, diningHibits: null }),
+                    ...(e.target.value === 'false' && { meal: null, diningHibits: null }),
                   }))}
                 >
                   <option value="false">不出席</option>
@@ -357,14 +380,15 @@ function ApplyPage() {
               {form.attended && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">葷素</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">餐食選擇</label>
                     <select
                       className="w-full border rounded px-3 py-2 bg-white"
-                      value={form.vegetables ? 'true' : 'false'}
-                      onChange={e => setForm(prev => ({ ...prev, vegetables: e.target.value === 'true' }))}
+                      value={form.meal ?? 'NORMAL'}
+                      onChange={e => setForm(prev => ({ ...prev, meal: e.target.value }))}
                     >
-                      <option value="false">葷食</option>
-                      <option value="true">素食</option>
+                      <option value="NORMAL">葷</option>
+                      <option value="LACTO_OVO">蛋奶素</option>
+                      <option value="VEGAN">完全素</option>
                     </select>
                   </div>
                   <div>

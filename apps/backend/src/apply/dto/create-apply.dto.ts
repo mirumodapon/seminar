@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator'
+import { IsOptional, IsString, MaxLength } from 'class-validator'
 
 export class CreateApplyDto {
   @IsString()
@@ -25,9 +25,20 @@ export class CreateApplyDto {
   @IsOptional()
   author?: string
 
-  @IsBoolean()
+  @IsString()
+  @MaxLength(255)
   @IsOptional()
-  vegetables?: boolean
+  keywords?: string
+
+  @IsString()
+  @MaxLength(255)
+  @IsOptional()
+  email?: string
+
+  @IsString()
+  @MaxLength(20)
+  @IsOptional()
+  meal?: string
 
   @IsString()
   @IsOptional()

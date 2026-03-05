@@ -29,9 +29,20 @@ export class UpdateApplyDto {
   @IsOptional()
   attended?: boolean
 
-  @IsBoolean()
+  @IsString()
+  @MaxLength(255)
   @IsOptional()
-  vegetables?: boolean
+  keywords?: string
+
+  @IsString()
+  @MaxLength(255)
+  @IsOptional()
+  email?: string
+
+  @IsString()
+  @MaxLength(20)
+  @IsOptional()
+  meal?: string
 
   @IsString()
   @IsOptional()
