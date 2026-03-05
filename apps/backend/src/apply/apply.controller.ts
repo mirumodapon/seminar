@@ -64,6 +64,12 @@ export class ApplyController {
       throw new ForbiddenException('無法修改他人的投稿')
     }
 
+    if (apply.status !== 'accepted') {
+      delete apply.meal
+      delete apply.attended
+      delete apply.diningHibits
+    }
+
     return this.applyService.update(applyId, body)
   }
 

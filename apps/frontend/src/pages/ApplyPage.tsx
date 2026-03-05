@@ -48,11 +48,8 @@ const EMPTY_FORM: Partial<Apply> = {
   abstract: '',
   school: '',
   department: '',
-  attended: false,
   keywords: '',
   email: '',
-  meal: 'NORMAL',
-  diningHibits: '',
 }
 
 function ApplyPage() {
@@ -362,45 +359,49 @@ function ApplyPage() {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">是否出席</label>
-                <select
-                  className="w-full border rounded px-3 py-2 bg-white"
-                  value={form.attended ? 'true' : 'false'}
-                  onChange={e => setForm(prev => ({
-                    ...prev,
-                    attended: e.target.value === 'true',
-                    ...(e.target.value === 'false' && { meal: null, diningHibits: null }),
-                  }))}
-                >
-                  <option value="false">不出席</option>
-                  <option value="true">出席</option>
-                </select>
-              </div>
-              {form.attended && (
+              {form.status === 'accepted' && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">餐食選擇</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">是否出席</label>
                     <select
                       className="w-full border rounded px-3 py-2 bg-white"
-                      value={form.meal ?? 'NORMAL'}
-                      onChange={e => setForm(prev => ({ ...prev, meal: e.target.value }))}
+                      value={form.attended ? 'true' : 'false'}
+                      onChange={e => setForm(prev => ({
+                        ...prev,
+                        attended: e.target.value === 'true',
+                        ...(e.target.value === 'false' && { meal: null, diningHibits: null }),
+                      }))}
                     >
-                      <option value="NORMAL">葷</option>
-                      <option value="LACTO_OVO">蛋奶素</option>
-                      <option value="VEGAN">完全素</option>
+                      <option value="false">不出席</option>
+                      <option value="true">出席</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">飲食習慣（備註）</label>
-                    <textarea
-                      className="w-full border rounded px-3 py-2 text-sm"
-                      rows={2}
-                      placeholder="過敏原、其他飲食限制等"
-                      value={form.diningHibits ?? ''}
-                      onChange={e => setForm(prev => ({ ...prev, diningHibits: e.target.value }))}
-                    />
-                  </div>
+                  {form.attended && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">餐食選擇</label>
+                        <select
+                          className="w-full border rounded px-3 py-2 bg-white"
+                          value={form.meal ?? 'NORMAL'}
+                          onChange={e => setForm(prev => ({ ...prev, meal: e.target.value }))}
+                        >
+                          <option value="NORMAL">葷</option>
+                          <option value="LACTO_OVO">蛋奶素</option>
+                          <option value="VEGAN">完全素</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">飲食習慣（備註）</label>
+                        <textarea
+                          className="w-full border rounded px-3 py-2 text-sm"
+                          rows={2}
+                          placeholder="過敏原、其他飲食限制等"
+                          value={form.diningHibits ?? ''}
+                          onChange={e => setForm(prev => ({ ...prev, diningHibits: e.target.value }))}
+                        />
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </div>

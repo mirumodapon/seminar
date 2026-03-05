@@ -34,13 +34,4 @@ export class CreateApplyDto {
   @MaxLength(255)
   @IsOptional()
   email?: string
-
-  @IsString()
-  @MaxLength(20)
-  @IsOptional()
-  meal?: string
-
-  @IsString()
-  @IsOptional()
-  diningHibits?: string
 }
