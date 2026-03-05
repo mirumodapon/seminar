@@ -39,7 +39,7 @@ export async function loader({ request }: any) {
 }
 
 const EMPTY_FORM: Partial<Apply> = {
-  activityId: '',
+  activityId: '2026',
   author: '',
   topic: '',
   abstract: '',
@@ -287,15 +287,15 @@ function ApplyPage() {
                     className="w-full border rounded px-3 py-2"
                     placeholder="請輸入活動 ID"
                     value={form.activityId ?? ''}
-                    onChange={e => setForm(prev => ({ ...prev, activityId: e.target.value }))}
+                    readOnly
                   />
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">主題</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">論文名稱</label>
                 <input
                   className="w-full border rounded px-3 py-2"
-                  placeholder="請輸入投稿主題"
+                  placeholder="請輸入論文名稱"
                   value={form.topic ?? ''}
                   onChange={e => setForm(prev => ({ ...prev, topic: e.target.value }))}
                 />
