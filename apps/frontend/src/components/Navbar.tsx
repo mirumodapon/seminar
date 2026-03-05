@@ -17,7 +17,7 @@ function Navbar(props: Props) {
   })), [props.navItems])
 
   return (
-    <nav className="w-full bg-blue-400">
+    <nav className="w-full bg-[#2B64A6] text-white font-bold">
       <ul className="flex flex-wrap">
         {navItems.map(item => (
           <li className="grow min-w-25" key={item.to}>
