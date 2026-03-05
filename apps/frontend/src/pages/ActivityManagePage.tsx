@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { useLoaderData, useRevalidator } from 'react-router'
+import { Link, useLoaderData, useRevalidator } from 'react-router'
 import { api } from '~/service/api'
 
 interface Activity {
@@ -130,6 +130,18 @@ function ActivityManagePage() {
           <button className="text-red-700 font-bold" onClick={() => setError(null)}>✕</button>
         </div>
       )}
+
+      {/* Quick Links */}
+      <section className="mb-8">
+        <div className="flex gap-3">
+          <Link
+            to={`/admin/${activity.activityId}/apply`}
+            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 text-sm"
+          >
+            投稿管理
+          </Link>
+        </div>
+      </section>
 
       {/* Images Section */}
       <section className="mb-8">
