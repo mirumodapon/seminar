@@ -14,16 +14,14 @@ export class CreateApplyDto {
 
   @IsString()
   @MaxLength(255)
-  @IsOptional()
-  author?: string
+  author: string
+
+  @IsString()
+  @MaxLength(255)
+  email: string
 
   @IsString()
   @MaxLength(255)
   @IsOptional()
   keywords?: string
-
-  @IsString()
-  @MaxLength(255)
-  @IsOptional()
-  email?: string
 }

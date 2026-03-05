@@ -65,6 +65,19 @@ function ApplyPage() {
     if (form.mode === null) return
     setError(null)
 
+    if (!form.topic?.trim()) {
+      setError('請填寫論文名稱')
+      return
+    }
+    if (!form.author?.trim()) {
+      setError('請填寫作者')
+      return
+    }
+    if (!form.email?.trim()) {
+      setError('請填寫電子郵件')
+      return
+    }
+
     try {
       if (form.mode === 'create') {
         await api.post('/apply', form, { withCredentials: true })
@@ -282,7 +295,7 @@ function ApplyPage() {
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">論文名稱</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">論文名稱 <span className="text-red-500">*</span></label>
                 <input
                   className="w-full border rounded px-3 py-2"
                   placeholder="請輸入論文名稱"
@@ -291,7 +304,7 @@ function ApplyPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">作者</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">作者 <span className="text-red-500">*</span></label>
                 <textarea
                   className="w-full border rounded px-3 py-2 text-sm"
                   rows={3}
@@ -302,7 +315,7 @@ function ApplyPage() {
                 <p className="text-xs text-gray-400 mt-1">每位作者佔一行，姓名、學校、系所以逗號隔開</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">電子郵件</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">電子郵件 <span className="text-red-500">*</span></label>
                 <input
                   type="email"
                   className="w-full border rounded px-3 py-2"
@@ -378,6 +391,9 @@ function ApplyPage() {
             </div>
 
             <div className="flex justify-end gap-3 mt-6">
+              {error && (
+                <p className="flex-1 text-sm text-red-600 self-center">{error}</p>
+              )}
               <button
                 className="px-4 py-2 border rounded hover:bg-gray-50"
                 onClick={() => setForm({ mode: null })}
