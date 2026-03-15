@@ -11,11 +11,13 @@ interface Apply {
   author: string | null
   email: string | null
   keywords: string | null
-  school: string | null
-  department: string | null
   status: string
   accepted: boolean
   attended: boolean | null
+  attendCount: number | null
+  mealNormal: number | null
+  mealLactoOvo: number | null
+  mealVegan: number | null
   meal: string | null
   diningHibits: string | null
   slides: string | null
@@ -286,18 +288,23 @@ function ApplyManagePage() {
                       </div>
                     </div>
                     {selected.attended && (
-                      <>
-                        <div>
-                          <div className="text-xs text-gray-400 mb-1">餐食</div>
-                          <div className="text-gray-700">{selected.meal ? (MEAL_LABEL[selected.meal] ?? selected.meal) : '未填寫'}</div>
+                      <div className="col-span-2">
+                        <div className="text-xs text-gray-400 mb-1">出席詳情</div>
+                        <div className="bg-gray-50 p-3 rounded border text-sm">
+                          <div className="font-medium mb-1">總人數: {selected.attendCount ?? 0}</div>
+                          <div className="grid grid-cols-3 gap-2 text-gray-600">
+                            <div>葷: {selected.mealNormal ?? 0}</div>
+                            <div>蛋奶素: {selected.mealLactoOvo ?? 0}</div>
+                            <div>完全素: {selected.mealVegan ?? 0}</div>
+                          </div>
                         </div>
                         {selected.diningHibits && (
-                          <div className="col-span-2">
+                          <div className="mt-3">
                             <div className="text-xs text-gray-400 mb-1">飲食備註</div>
-                            <div className="text-gray-700">{selected.diningHibits}</div>
+                            <div className="text-gray-700 whitespace-pre-wrap">{selected.diningHibits}</div>
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>

@@ -14,6 +14,10 @@ interface Apply {
   keywords: string | null
   email: string | null
   meal: string | null
+  mealNormal: number | null
+  mealLactoOvo: number | null
+  mealVegan: number | null
+  attendCount: number | null
   diningHibits: string | null
   slides: string | null
   poster: string | null
@@ -46,6 +50,10 @@ const EMPTY_FORM: Partial<Apply> = {
   abstract: '',
   keywords: '',
   email: '',
+  attendCount: 0,
+  mealNormal: 0,
+  mealLactoOvo: 0,
+  mealVegan: 0,
 }
 
 function ApplyPage() {
@@ -76,6 +84,18 @@ function ApplyPage() {
     if (!form.email?.trim()) {
       setError('請填寫電子郵件')
       return
+    }
+
+    if (form.status === 'accepted' && form.attended) {
+      if (!form.attendCount || form.attendCount <= 0) {
+        setError('請填寫出席人數')
+        return
+      }
+      const totalMeals = (Number(form.mealNormal) || 0) + (Number(form.mealLactoOvo) || 0) + (Number(form.mealVegan) || 0)
+      if (totalMeals > form.attendCount) {
+        setError('餐食數量總和不可大於出席人數')
+        return
+      }
     }
 
     try {
@@ -199,6 +219,18 @@ function ApplyPage() {
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="text-lg font-semibold">{apply.topic}</h3>
+                      {apply.status === 'accepted' && (
+                        apply.attended === null ? (
+                          <div className="text-sm text-red-500 font-bold mt-1">請確認是否出席</div>
+                        ) : apply.attended ? (
+                          <div className="text-sm text-green-600 mt-1">
+                            已確認出席 ({apply.attendCount ?? 0} 人)
+                            {(!apply.attendCount || apply.attendCount === 0) && <span className="text-red-500 ml-2 font-bold">請填寫出席人數</span>}
+                          </div>
+                        ) : (
+                          <div className="text-sm text-gray-500 mt-1">不出席</div>
+                        )
+                      )}
                       {apply.updatedAt && (
                         <p className="text-xs text-gray-400 mt-0.5">
                           最後更新：
@@ -363,16 +395,49 @@ function ApplyPage() {
                   {form.attended && (
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">餐食選擇</label>
-                        <select
-                          className="w-full border rounded px-3 py-2 bg-white"
-                          value={form.meal ?? 'NORMAL'}
-                          onChange={e => setForm(prev => ({ ...prev, meal: e.target.value }))}
-                        >
-                          <option value="NORMAL">葷</option>
-                          <option value="LACTO_OVO">蛋奶素</option>
-                          <option value="VEGAN">完全素</option>
-                        </select>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">出席人數</label>
+                        <input
+                          type="number"
+                          min={1}
+                          className="w-full border rounded px-3 py-2"
+                          value={form.attendCount ?? 0}
+                          onChange={e => setForm(prev => ({ ...prev, attendCount: Number(e.target.value) }))}
+                        />
+                      </div>
+                      <div className="p-3 bg-gray-50 rounded border">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">餐食統計</label>
+                        <div className="grid grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">葷</label>
+                            <input
+                              type="number"
+                              min={0}
+                              className="w-full border rounded px-2 py-1 text-sm"
+                              value={form.mealNormal ?? 0}
+                              onChange={e => setForm(prev => ({ ...prev, mealNormal: Number(e.target.value) }))}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">蛋奶素</label>
+                            <input
+                              type="number"
+                              min={0}
+                              className="w-full border rounded px-2 py-1 text-sm"
+                              value={form.mealLactoOvo ?? 0}
+                              onChange={e => setForm(prev => ({ ...prev, mealLactoOvo: Number(e.target.value) }))}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">完全素</label>
+                            <input
+                              type="number"
+                              min={0}
+                              className="w-full border rounded px-2 py-1 text-sm"
+                              value={form.mealVegan ?? 0}
+                              onChange={e => setForm(prev => ({ ...prev, mealVegan: Number(e.target.value) }))}
+                            />
+                          </div>
+                        </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">飲食習慣（備註）</label>
