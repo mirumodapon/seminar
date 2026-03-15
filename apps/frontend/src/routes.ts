@@ -7,6 +7,7 @@ const routes: RouteConfig = [
   route('admin', 'pages/AdminPage.tsx'),
   route('admin/:activityId', 'pages/ActivityManagePage.tsx'),
   route('admin/:activityId/apply', 'pages/ApplyManagePage.tsx'),
+  route('admin/:activityId/statistics', 'pages/StatisticsPage.tsx'),
   route(':activityId', 'layouts/ActivityPageLayout.tsx', [
     route('', 'pages/ActivityHomePage.tsx'),
     route('apply', 'pages/ApplyPage.tsx'),
