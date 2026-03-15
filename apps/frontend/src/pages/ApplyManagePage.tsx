@@ -11,11 +11,13 @@ interface Apply {
   author: string | null
   email: string | null
   keywords: string | null
-  school: string | null
-  department: string | null
   status: string
   accepted: boolean
   attended: boolean | null
+  attendCount: number | null
+  mealNormal: number | null
+  mealLactoOvo: number | null
+  mealVegan: number | null
   meal: string | null
   diningHibits: string | null
   slides: string | null
@@ -36,12 +38,6 @@ const STATUS_STYLE: Record<string, string> = {
   reviewing: 'bg-yellow-100 text-yellow-700',
   accepted: 'bg-green-100 text-green-700',
   rejected: 'bg-red-100 text-red-700',
-}
-
-const MEAL_LABEL: Record<string, string> = {
-  NORMAL: '葷',
-  LACTO_OVO: '蛋奶素',
-  VEGAN: '完全素',
 }
 
 export async function loader({ params, request }: any) {
@@ -101,7 +97,19 @@ function ApplyManagePage() {
           ← 返回活動管理
         </Link>
         <h1 className="text-2xl font-bold">投稿管理</h1>
-        <span className="text-gray-400 text-sm">共 {applies.length} 筆</span>
+        <span className="text-gray-400 text-sm">
+          共
+          {applies.length}
+          {' '}
+          筆
+        </span>
+        <div className="flex-1" />
+        <Link
+          to={`/admin/${activityId}/statistics`}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
+        >
+          查看統計與下載
+        </Link>
       </div>
 
       {error && (
@@ -117,7 +125,9 @@ function ApplyManagePage() {
           className={`px-3 py-1.5 rounded text-sm border ${filterStatus === 'all' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
           onClick={() => setFilterStatus('all')}
         >
-          全部（{applies.length}）
+          全部（
+          {applies.length}
+          ）
         </button>
         {STATUS_OPTIONS.map(opt => (
           <button
@@ -125,7 +135,10 @@ function ApplyManagePage() {
             className={`px-3 py-1.5 rounded text-sm border ${filterStatus === opt.value ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
             onClick={() => setFilterStatus(opt.value)}
           >
-            {opt.label}（{applies.filter(a => a.status === opt.value).length}）
+            {opt.label}
+            （
+            {applies.filter(a => a.status === opt.value).length}
+            ）
           </button>
         ))}
       </div>
@@ -249,7 +262,10 @@ function ApplyManagePage() {
                 </div>
                 <div>
                   <div className="text-xs text-gray-400 mb-1">投稿編號</div>
-                  <div className="text-gray-700">#{selected.applyId}</div>
+                  <div className="text-gray-700">
+                    #
+                    {selected.applyId}
+                  </div>
                 </div>
               </div>
 
@@ -286,18 +302,35 @@ function ApplyManagePage() {
                       </div>
                     </div>
                     {selected.attended && (
-                      <>
-                        <div>
-                          <div className="text-xs text-gray-400 mb-1">餐食</div>
-                          <div className="text-gray-700">{selected.meal ? (MEAL_LABEL[selected.meal] ?? selected.meal) : '未填寫'}</div>
+                      <div className="col-span-2">
+                        <div className="text-xs text-gray-400 mb-1">出席詳情</div>
+                        <div className="bg-gray-50 p-3 rounded border text-sm">
+                          <div className="font-medium mb-1">
+                            總人數:
+                            {selected.attendCount ?? 0}
+                          </div>
+                          <div className="grid grid-cols-3 gap-2 text-gray-600">
+                            <div>
+                              葷:
+                              {selected.mealNormal ?? 0}
+                            </div>
+                            <div>
+                              蛋奶素:
+                              {selected.mealLactoOvo ?? 0}
+                            </div>
+                            <div>
+                              完全素:
+                              {selected.mealVegan ?? 0}
+                            </div>
+                          </div>
                         </div>
                         {selected.diningHibits && (
-                          <div className="col-span-2">
+                          <div className="mt-3">
                             <div className="text-xs text-gray-400 mb-1">飲食備註</div>
-                            <div className="text-gray-700">{selected.diningHibits}</div>
+                            <div className="text-gray-700 whitespace-pre-wrap">{selected.diningHibits}</div>
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>

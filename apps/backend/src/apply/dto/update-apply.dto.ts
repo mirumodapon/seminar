@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator'
+import { IsBoolean, IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator'
 
 export class UpdateApplyDto {
   @IsString()
@@ -9,16 +9,6 @@ export class UpdateApplyDto {
   @IsString()
   @IsOptional()
   abstract?: string
-
-  @IsString()
-  @MaxLength(255)
-  @IsOptional()
-  school?: string
-
-  @IsString()
-  @MaxLength(255)
-  @IsOptional()
-  department?: string
 
   @IsString()
   @MaxLength(255)
@@ -47,4 +37,24 @@ export class UpdateApplyDto {
   @IsString()
   @IsOptional()
   diningHibits?: string
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  attendCount?: number
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  mealNormal?: number
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  mealLactoOvo?: number
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  mealVegan?: number
 }

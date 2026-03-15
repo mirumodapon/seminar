@@ -13,6 +13,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Res,
   Session,
   StreamableFile,
@@ -160,6 +161,12 @@ export class ApplyController {
   }
 
   // ── 管理員路由 ──────────────────────────────────────────────
+
+  @Get('statistics')
+  @UseGuards(AdminGuard)
+  getStatistics(@Query('activityId') activityId?: string) {
+    return this.applyService.getStatistics(activityId)
+  }
 
   @Get()
   @UseGuards(AdminGuard)
