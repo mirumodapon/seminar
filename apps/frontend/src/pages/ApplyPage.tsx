@@ -70,7 +70,8 @@ function ApplyPage() {
   const [uploadProgress, setUploadProgress] = useState(0)
 
   async function handleSubmit() {
-    if (form.mode === null) return
+    if (form.mode === null)
+      return
     setError(null)
 
     if (!form.topic?.trim()) {
@@ -144,7 +145,8 @@ function ApplyPage() {
 
   function triggerUpload(applyId: number, type: 'slides' | 'poster') {
     setUploadingFor({ applyId, type })
-    if (type === 'slides') slidesInputRef.current?.click()
+    if (type === 'slides')
+      slidesInputRef.current?.click()
     else posterInputRef.current?.click()
   }
 
@@ -189,7 +191,8 @@ function ApplyPage() {
         accept=".pdf,.ppt,.pptx"
         onChange={(e) => {
           const file = e.target.files?.[0]
-          if (file && uploadingFor) handleFileUpload(uploadingFor.applyId, 'slides', file)
+          if (file && uploadingFor)
+            handleFileUpload(uploadingFor.applyId, 'slides', file)
           e.target.value = ''
         }}
       />
@@ -200,7 +203,8 @@ function ApplyPage() {
         accept=".pdf,.png,.jpg,.jpeg"
         onChange={(e) => {
           const file = e.target.files?.[0]
-          if (file && uploadingFor) handleFileUpload(uploadingFor.applyId, 'poster', file)
+          if (file && uploadingFor)
+            handleFileUpload(uploadingFor.applyId, 'poster', file)
           e.target.value = ''
         }}
       />
@@ -220,16 +224,23 @@ function ApplyPage() {
                     <div>
                       <h3 className="text-lg font-semibold">{apply.topic}</h3>
                       {apply.status === 'accepted' && (
-                        apply.attended === null ? (
-                          <div className="text-sm text-red-500 font-bold mt-1">請確認是否出席</div>
-                        ) : apply.attended ? (
-                          <div className="text-sm text-green-600 mt-1">
-                            已確認出席 ({apply.attendCount ?? 0} 人)
-                            {(!apply.attendCount || apply.attendCount === 0) && <span className="text-red-500 ml-2 font-bold">請填寫出席人數</span>}
-                          </div>
-                        ) : (
-                          <div className="text-sm text-gray-500 mt-1">不出席</div>
-                        )
+                        apply.attended === null
+                          ? (
+                              <div className="text-sm text-red-500 font-bold mt-1">請確認是否出席</div>
+                            )
+                          : apply.attended
+                            ? (
+                                <div className="text-sm text-green-600 mt-1">
+                                  已確認出席 (
+                                  {apply.attendCount ?? 0}
+                                  {' '}
+                                  人)
+                                  {(!apply.attendCount || apply.attendCount === 0) && <span className="text-red-500 ml-2 font-bold">請填寫出席人數</span>}
+                                </div>
+                              )
+                            : (
+                                <div className="text-sm text-gray-500 mt-1">不出席</div>
+                              )
                       )}
                       {apply.updatedAt && (
                         <p className="text-xs text-gray-400 mt-0.5">
@@ -328,7 +339,10 @@ function ApplyPage() {
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">論文名稱 <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  論文名稱
+                  <span className="text-red-500">*</span>
+                </label>
                 <input
                   className="w-full border rounded px-3 py-2"
                   placeholder="請輸入論文名稱"
@@ -337,7 +351,10 @@ function ApplyPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">作者 <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  作者
+                  <span className="text-red-500">*</span>
+                </label>
                 <textarea
                   className="w-full border rounded px-3 py-2 text-sm"
                   rows={3}
@@ -348,7 +365,10 @@ function ApplyPage() {
                 <p className="text-xs text-gray-400 mt-1">每位作者佔一行，姓名、學校、系所以逗號隔開</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">電子郵件 <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  電子郵件
+                  <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="email"
                   className="w-full border rounded px-3 py-2"
