@@ -36,7 +36,7 @@ export class AuthController {
     }
 
     session.user = dbUser
-    res.redirect('https://seminar.nptucsai.org/')
+    res.redirect(`https://seminar.nptucsai.org/2026/apply`)
 
     return dbUser
   }
