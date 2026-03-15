@@ -238,11 +238,12 @@ function ApplyPage() {
                         </p>
                       )}
                     </div>
-                    <span className={`px-2 py-1 rounded text-sm font-medium ${
-                      apply.status === 'accepted'
-                        ? 'bg-green-100 text-green-700'
-                        : apply.status === 'rejected'
-                          ? 'bg-red-100 text-red-700'
+                    <span className={`px-2 py-1 rounded text-sm font-medium ${apply.status === 'accepted'
+                      ? 'bg-green-100 text-green-700'
+                      : apply.status === 'rejected'
+                        ? 'bg-red-100 text-red-700'
+                        : apply.status === 'reviewing'
+                          ? 'bg-yellow-100 text-yellow-700'
                           : 'bg-gray-100 text-gray-600'
                     }`}
                     >
