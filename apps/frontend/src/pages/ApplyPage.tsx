@@ -86,6 +86,14 @@ function ApplyPage() {
       setError('請填寫電子郵件')
       return
     }
+    if (!form.abstract?.trim()) {
+      setError('請填寫摘要')
+      return
+    }
+    if (!form.keywords?.trim()) {
+      setError('請填寫關鍵字')
+      return
+    }
 
     if (form.status === 'accepted' && form.attended) {
       if (!form.attendCount || form.attendCount <= 0) {
@@ -378,7 +386,10 @@ function ApplyPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">摘要</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  摘要
+                  <span className="text-red-500">*</span>
+                </label>
                 <textarea
                   className="w-full border rounded px-3 py-2 text-sm"
                   rows={5}
@@ -388,7 +399,10 @@ function ApplyPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">關鍵字</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  關鍵字
+                  <span className="text-red-500">*</span>
+                </label>
                 <input
                   className="w-full border rounded px-3 py-2"
                   placeholder="請輸入關鍵字"
