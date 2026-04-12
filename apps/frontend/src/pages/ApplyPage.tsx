@@ -67,8 +67,8 @@ export async function loader({ params, request }: any) {
 function getActionState(deadline: string | null) {
   if (!deadline) {
     return {
-      isOpen: false,
-      label: '未開放',
+      isOpen: true,
+      label: '常時開放',
     }
   }
 
@@ -291,7 +291,7 @@ function ApplyPage() {
             <div className="text-center py-16 border rounded text-gray-400">
               {createAction.isOpen
                 ? '尚無投稿，點擊右上角「新增投稿」開始投稿'
-                : '尚無投稿，目前也未開放建立投稿'}
+                : '尚無投稿，目前未開放建立投稿'}
             </div>
           )
         : (

@@ -75,6 +75,24 @@ describe('applyScheduleService', () => {
     )
   })
 
+  it('allows actions when deadline is not set', async () => {
+    const redis = {
+      get: jest.fn().mockResolvedValue(JSON.stringify({
+        activityId: '2026',
+        applyCreateDeadlineAt: null,
+        applyEditDeadlineAt: null,
+        slidesUploadDeadlineAt: null,
+        posterUploadDeadlineAt: null,
+      })),
+      setEx: jest.fn(),
+      del: jest.fn(),
+    } as unknown as RedisClientType
+    const knex = jest.fn() as unknown as Knex
+    const service = new ApplyScheduleService(knex, redis)
+
+    await expect(service.assertActionAllowed('2026', 'create')).resolves.toBeUndefined()
+  })
+
   it('blocks actions when deadline has passed', async () => {
     const redis = {
       get: jest.fn().mockResolvedValue(JSON.stringify({

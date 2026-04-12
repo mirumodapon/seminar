@@ -80,7 +80,7 @@ export class ApplyScheduleService {
     const actionLabel = applyScheduleActionLabelMap[action]
 
     if (!deadline) {
-      throw new ForbiddenException(`${actionLabel}目前未開放`)
+      return
     }
 
     if (Date.now() >= new Date(deadline).getTime()) {

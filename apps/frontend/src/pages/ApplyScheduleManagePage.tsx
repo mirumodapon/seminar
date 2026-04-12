@@ -106,8 +106,8 @@ function toApiValue(value: string): string | null {
 function formatStatus(value: string) {
   if (!value) {
     return {
-      label: '未設定',
-      className: 'text-gray-500',
+      label: '常時開放',
+      className: 'text-green-600',
     }
   }
 
@@ -217,7 +217,7 @@ function ApplyScheduleManagePage() {
       <section className="border rounded-lg p-5 mb-6 bg-white">
         <h2 className="text-lg font-semibold mb-2">設定說明</h2>
         <p className="text-sm text-gray-600">
-          每個操作都使用獨立的截止時間。留空代表該操作目前未開放；一旦超過設定時間，對應 API 就會被後端 guard 關閉。
+          每個操作都使用獨立的截止時間。留空代表該操作常時開放；一旦超過設定時間，對應 API 就會被後端 guard 關閉。
         </p>
       </section>
 
