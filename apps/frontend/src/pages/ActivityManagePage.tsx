@@ -44,6 +44,7 @@ function ActivityManagePage() {
   const { revalidate } = useRevalidator()
 
   const [pageForm, setPageForm] = useState<PageFormState>({ mode: null })
+  const [pagePendingDelete, setPagePendingDelete] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [bannerCacheBust, setBannerCacheBust] = useState(0)
   const [ogImageCacheBust, setOgImageCacheBust] = useState(0)
@@ -103,12 +104,11 @@ function ActivityManagePage() {
   }
 
   async function handleDeletePage(pageId: string) {
-    if (!confirm(`確定要刪除「${pageId}」頁面嗎？`))
-      return
     setError(null)
 
     try {
       await api.delete(`/activity/${activity.activityId}/page/${pageId}`, { withCredentials: true })
+      setPagePendingDelete(null)
       revalidate()
     }
     catch (err: any) {
@@ -134,6 +134,12 @@ function ActivityManagePage() {
       {/* Quick Links */}
       <section className="mb-8">
         <div className="flex gap-3">
+          <Link
+            to={`/admin/${activity.activityId}/apply-schedule`}
+            className="px-4 py-2 bg-emerald-500 text-white rounded hover:bg-emerald-600 text-sm"
+          >
+            投稿時間設定
+          </Link>
           <Link
             to={`/admin/${activity.activityId}/apply`}
             className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 text-sm"
@@ -253,7 +259,7 @@ function ActivityManagePage() {
                 </button>
                 <button
                   className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
-                  onClick={() => handleDeletePage(page.pageId)}
+                  onClick={() => setPagePendingDelete(page.pageId)}
                 >
                   刪除
                 </button>
@@ -337,6 +343,32 @@ function ActivityManagePage() {
           </div>
         )
       }
+      {pagePendingDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-2">刪除頁面</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              確定要刪除「
+              {pagePendingDelete}
+              」頁面嗎？
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 border rounded hover:bg-gray-50"
+                onClick={() => setPagePendingDelete(null)}
+              >
+                取消
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={() => handleDeletePage(pagePendingDelete)}
+              >
+                確認刪除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

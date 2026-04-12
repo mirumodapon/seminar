@@ -2,6 +2,14 @@ import { useRef, useState } from 'react'
 import { redirect, useLoaderData, useRevalidator } from 'react-router'
 import { api } from '~/service/api'
 
+interface ApplySchedule {
+  activityId: string
+  applyCreateDeadlineAt: string | null
+  applyEditDeadlineAt: string | null
+  slidesUploadDeadlineAt: string | null
+  posterUploadDeadlineAt: string | null
+}
+
 interface Apply {
   applyId: number
   activityId: string
@@ -26,12 +34,25 @@ interface Apply {
 
 type FormState = { mode: null } | ({ mode: 'create' | 'edit' } & Partial<Apply>)
 
-export async function loader({ request }: any) {
+export async function loader({ params, request }: any) {
   const Cookie = request.headers.get('Cookie')
+  const { activityId } = params
+
+  if (!activityId) {
+    throw new Response('Activity not found', { status: 404 })
+  }
 
   try {
-    const res = await api('/apply/me', { headers: { Cookie } })
-    return { applies: res.data as Apply[] }
+    const [applyRes, scheduleRes] = await Promise.all([
+      api('/apply/me', { headers: { Cookie } }),
+      api(`/activity/${activityId}/apply-schedule`, { headers: { Cookie } }),
+    ])
+
+    return {
+      activityId,
+      applies: (applyRes.data as Apply[]).filter(apply => apply.activityId === activityId),
+      schedule: scheduleRes.data as ApplySchedule,
+    }
   }
   catch (err: any) {
     const status = err.response?.status
@@ -43,21 +64,31 @@ export async function loader({ request }: any) {
   }
 }
 
-const EMPTY_FORM: Partial<Apply> = {
-  activityId: '2026',
-  author: '',
-  topic: '',
-  abstract: '',
-  keywords: '',
-  email: '',
-  attendCount: 0,
-  mealNormal: 0,
-  mealLactoOvo: 0,
-  mealVegan: 0,
+function getActionState(deadline: string | null) {
+  if (!deadline) {
+    return {
+      isOpen: true,
+      label: '常時開放',
+    }
+  }
+
+  const deadlineTime = new Date(deadline).getTime()
+
+  if (Number.isNaN(deadlineTime) || Date.now() >= deadlineTime) {
+    return {
+      isOpen: false,
+      label: '已截止',
+    }
+  }
+
+  return {
+    isOpen: true,
+    label: `截止：${new Date(deadline).toLocaleString('zh-TW')}`,
+  }
 }
 
 function ApplyPage() {
-  const { applies } = useLoaderData<typeof loader>()
+  const { activityId, applies, schedule } = useLoaderData<typeof loader>()
   const { revalidate } = useRevalidator()
 
   const [form, setForm] = useState<FormState>({ mode: null })
@@ -68,6 +99,11 @@ function ApplyPage() {
   const posterInputRef = useRef<HTMLInputElement>(null)
   const [uploadingFor, setUploadingFor] = useState<{ applyId: number, type: 'slides' | 'poster' } | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const createAction = getActionState(schedule.applyCreateDeadlineAt)
+  const editAction = getActionState(schedule.applyEditDeadlineAt)
+  const slidesUploadAction = getActionState(schedule.slidesUploadDeadlineAt)
+  const posterUploadAction = getActionState(schedule.posterUploadDeadlineAt)
+  const canSubmitCurrentForm = form.mode === 'create' ? createAction.isOpen : form.mode === 'edit' ? editAction.isOpen : false
 
   async function handleSubmit() {
     if (form.mode === null)
@@ -170,11 +206,43 @@ function ApplyPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">我的投稿</h1>
         <button
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          onClick={() => setForm({ mode: 'create', ...EMPTY_FORM })}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!createAction.isOpen}
+          onClick={() => setForm({
+            mode: 'create',
+            activityId,
+            author: '',
+            topic: '',
+            abstract: '',
+            keywords: '',
+            email: '',
+            attendCount: 0,
+            mealNormal: 0,
+            mealLactoOvo: 0,
+            mealVegan: 0,
+          })}
         >
           新增投稿
         </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 text-sm">
+        <div className="border rounded p-3">
+          <div className="font-medium text-gray-800">建立投稿</div>
+          <div className={createAction.isOpen ? 'text-green-600 mt-1' : 'text-red-500 mt-1'}>{createAction.label}</div>
+        </div>
+        <div className="border rounded p-3">
+          <div className="font-medium text-gray-800">編輯投稿</div>
+          <div className={editAction.isOpen ? 'text-green-600 mt-1' : 'text-red-500 mt-1'}>{editAction.label}</div>
+        </div>
+        <div className="border rounded p-3">
+          <div className="font-medium text-gray-800">上傳簡報</div>
+          <div className={slidesUploadAction.isOpen ? 'text-green-600 mt-1' : 'text-red-500 mt-1'}>{slidesUploadAction.label}</div>
+        </div>
+        <div className="border rounded p-3">
+          <div className="font-medium text-gray-800">上傳海報</div>
+          <div className={posterUploadAction.isOpen ? 'text-green-600 mt-1' : 'text-red-500 mt-1'}>{posterUploadAction.label}</div>
+        </div>
       </div>
 
       {/* Notifications */}
@@ -221,7 +289,9 @@ function ApplyPage() {
       {applies.length === 0
         ? (
             <div className="text-center py-16 border rounded text-gray-400">
-              尚無投稿，點擊右上角「新增投稿」開始投稿
+              {createAction.isOpen
+                ? '尚無投稿，點擊右上角「新增投稿」開始投稿'
+                : '尚無投稿，目前未開放建立投稿'}
             </div>
           )
         : (
@@ -275,7 +345,7 @@ function ApplyPage() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       className="px-3 py-1.5 bg-yellow-400 text-white rounded hover:bg-yellow-500 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={uploadingFor?.applyId === apply.applyId}
+                      disabled={uploadingFor?.applyId === apply.applyId || !editAction.isOpen}
                       onClick={() => setForm({
                         mode: 'edit',
                         ...apply,
@@ -286,14 +356,14 @@ function ApplyPage() {
                     </button>
                     <button
                       className={`px-3 py-1.5 rounded text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed ${apply.slides ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 hover:bg-gray-500'}`}
-                      disabled={uploadingFor?.applyId === apply.applyId}
+                      disabled={uploadingFor?.applyId === apply.applyId || !slidesUploadAction.isOpen}
                       onClick={() => triggerUpload(apply.applyId, 'slides')}
                     >
                       {apply.slides ? '重新上傳簡報' : '上傳簡報'}
                     </button>
                     <button
                       className={`px-3 py-1.5 rounded text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed ${apply.poster ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 hover:bg-gray-500'}`}
-                      disabled={uploadingFor?.applyId === apply.applyId}
+                      disabled={uploadingFor?.applyId === apply.applyId || !posterUploadAction.isOpen}
                       onClick={() => triggerUpload(apply.applyId, 'poster')}
                     >
                       {apply.poster ? '重新上傳海報' : '上傳海報'}
@@ -494,6 +564,11 @@ function ApplyPage() {
               {error && (
                 <p className="flex-1 text-sm text-red-600 self-center">{error}</p>
               )}
+              {!canSubmitCurrentForm && (
+                <p className="flex-1 text-sm text-red-600 self-center">
+                  {form.mode === 'create' ? '目前未開放建立投稿' : '目前未開放編輯投稿'}
+                </p>
+              )}
               <button
                 className="px-4 py-2 border rounded hover:bg-gray-50"
                 onClick={() => setForm({ mode: null })}
@@ -501,7 +576,8 @@ function ApplyPage() {
                 取消
               </button>
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!canSubmitCurrentForm}
                 onClick={handleSubmit}
               >
                 {form.mode === 'create' ? '送出投稿' : '儲存修改'}

@@ -25,6 +25,8 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { fromBuffer } from 'file-type'
 import { diskStorage } from 'multer'
 import { AdminGuard, UserGuard } from '../auth/guard'
+import { ApplySchedule } from './apply-schedule.decorator'
+import { ApplyScheduleGuard } from './apply-schedule.guard'
 import { ApplyService } from './apply.service'
 import { AdminUpdateApplyDto } from './dto/admin-update-apply.dto'
 import { CreateApplyDto } from './dto/create-apply.dto'
@@ -37,7 +39,8 @@ export class ApplyController {
   // ── 使用者路由 ──────────────────────────────────────────────
 
   @Post()
-  @UseGuards(UserGuard)
+  @ApplySchedule('create')
+  @UseGuards(UserGuard, ApplyScheduleGuard)
   create(@Body() body: CreateApplyDto, @Session() session: Record<string, any>) {
     return this.applyService.create(session.user.userId, body)
   }
@@ -49,7 +52,8 @@ export class ApplyController {
   }
 
   @Patch('me/:applyId')
-  @UseGuards(UserGuard)
+  @ApplySchedule('edit')
+  @UseGuards(UserGuard, ApplyScheduleGuard)
   async updateMine(
     @Param('applyId', ParseIntPipe) applyId: number,
     @Body() body: UpdateApplyDto,
@@ -66,16 +70,17 @@ export class ApplyController {
     }
 
     if (apply.status !== 'accepted') {
-      delete apply.meal
-      delete apply.attended
-      delete apply.diningHibits
+      delete body.meal
+      delete body.attended
+      delete body.diningHibits
     }
 
     return this.applyService.update(applyId, body)
   }
 
   @Post('me/:applyId/slides')
-  @UseGuards(UserGuard)
+  @ApplySchedule('slidesUpload')
+  @UseGuards(UserGuard, ApplyScheduleGuard)
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads/slides',
@@ -118,7 +123,8 @@ export class ApplyController {
   }
 
   @Post('me/:applyId/poster')
-  @UseGuards(UserGuard)
+  @ApplySchedule('posterUpload')
+  @UseGuards(UserGuard, ApplyScheduleGuard)
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads/poster',
