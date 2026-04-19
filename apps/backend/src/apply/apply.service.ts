@@ -13,6 +13,10 @@ export class ApplyService {
     return this.knex('apply').select('*')
   }
 
+  findByActivity(activityId: string) {
+    return this.knex('apply').where('activityId', activityId).select('*')
+  }
+
   findOne(applyId: number) {
     return this.knex('apply').where('applyId', applyId).first()
   }
