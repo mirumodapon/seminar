@@ -184,7 +184,7 @@ function ApplyManagePage() {
             <div className="text-center py-16 border rounded text-gray-400">尚無投稿</div>
           )
         : (
-            <div className="border rounded-lg overflow-hidden">
+            <div className="border rounded-lg overflow-auto">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b">
                   <tr>
@@ -202,7 +202,7 @@ function ApplyManagePage() {
                       <td className="px-4 py-3">
                         <div className="font-medium text-gray-800 max-w-xs truncate">{apply.topic}</div>
                         {apply.keywords && (
-                          <div className="text-xs text-gray-400 mt-0.5 truncate">{apply.keywords}</div>
+                          <div className="text-xs text-gray-400 max-w-xs mt-0.5 truncate">{apply.keywords}</div>
                         )}
                       </td>
                       <td className="px-4 py-3 text-gray-600 max-w-[140px]">
