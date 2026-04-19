@@ -23,6 +23,7 @@ RUN mkdir -p /app/migrations;
 RUN cp /app/dist/migrations/*.js /app/migrations;
 
 WORKDIR /app
+COPY apps/backend/fonts /app/fonts
 
 ENV FRONTEND_RESOURCE=/app/build
 
