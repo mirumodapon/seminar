@@ -45,7 +45,11 @@ type CJKFont = { path: string, family?: string }
 
 function detectCJKFont(): CJKFont | null {
   const candidates: CJKFont[] = [
+    // bundled font — highest priority, works in any environment
+    { path: join(process.cwd(), 'fonts', 'NotoSansSC-Regular.otf') },
+    // macOS system fallback
     { path: '/System/Library/Fonts/STHeiti Light.ttc', family: 'STHeitiSC-Light' },
+    // Linux system fallback
     { path: '/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf' },
     { path: '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc', family: 'Noto Sans CJK SC Regular' },
   ]
