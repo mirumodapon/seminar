@@ -63,8 +63,36 @@ function ApplyManagePage() {
   const [selected, setSelected] = useState<Apply | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+  const [downloading, setDownloading] = useState(false)
 
   const BASE_URL = import.meta.env.VITE_API_URL
+
+  async function handleExportAll() {
+    setDownloading(true)
+    setError(null)
+    try {
+      const res = await fetch(`${BASE_URL}/apply/export?activityId=${activityId}`, {
+        credentials: 'include',
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.message ?? '下載失敗')
+      }
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${activityId}-applies.zip`
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+    catch (err: any) {
+      setError(err.message ?? '下載失敗')
+    }
+    finally {
+      setDownloading(false)
+    }
+  }
 
   const filtered = filterStatus === 'all'
     ? applies
@@ -104,6 +132,13 @@ function ApplyManagePage() {
           筆
         </span>
         <div className="flex-1" />
+        <button
+          onClick={handleExportAll}
+          disabled={downloading}
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {downloading ? '產生中…' : '下載全部投稿 PDF'}
+        </button>
         <Link
           to={`/admin/${activityId}/statistics`}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
